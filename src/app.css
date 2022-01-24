@@ -1,0 +1,68 @@
+:root {
+    font-family: monospace;
+}
+body { 
+    margin: 0;
+}
+nav {
+    background-color: white;
+}
+main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+}
+.box {
+    padding: 1vw;
+    margin: 2vw;
+    box-shadow: 0vw 1vw 1vw 0.1vw lightgray;
+    width: 50vh;
+    height: auto;
+    background-color: lemonchiffon;
+}
+.box:nth-of-type(2n+1) {
+    transform: rotateZ(-2deg);
+}
+.box:nth-of-type(3n+1) {
+    transform: rotateZ(2deg);
+}
+.whitebox {
+    padding: 1vw;
+    margin: 2vw;
+    width: 90vw;
+    border: solid lightgrey 1px;
+    text-align: center;
+    border-radius: 10vw;
+    background-color: white;
+}
+h1, h2 {
+    color: salmon;
+}
+h3 {
+    color: grey;
+}
+input {
+    margin: 1vw;
+    text-align: left;
+}
+a {
+    text-decoration: none;
+    color: grey;
+}
+form {
+    text-align: center;
+}
+label {
+    display: inline-block;
+    width: 20vw;
+    text-align: right;
+    color: grey;
+}
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+button {
+    margin: 1vh;
+}

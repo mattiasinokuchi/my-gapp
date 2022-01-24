@@ -10,7 +10,12 @@
   "devDependencies": {
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/kit": "next",
+    "env-cmd": "^10.1.0",
     "svelte": "^3.44.0"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "cookie": "^0.4.1",
+    "pg": "^8.7.1"
+  }
 }
