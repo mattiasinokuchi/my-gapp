@@ -2,22 +2,21 @@
 
 import cookie from 'cookie';
 
-//const authURL = `https://${process.env.AUTH0_DOMAIN}/oauth/token`;
-//const userURL = `https://${process.env.AUTH0_DOMAIN}/userinfo`;
-
-export async function get(request) {
+export const get = async (event) => {
     console.log('endpoint');
     //  ...gets the code from Auth0...
-    const code = request.query.get('code');
+    const url = new URL (event.url.href);
+    const params = new URLSearchParams(url.search);
+    const code = params.get('code');
     //  ...to use when getting an access token...
-    const accessToken = await getAccessToken(code, request.host)
+    const accessToken = await getAccessToken(code, event.url.host);
     //  ...to use for validation and getting users email...
     const userEmail = await getUserEmail(accessToken)
     //  ...and cache for later use in hooks.js...
     await cacheUser(accessToken, userEmail);
     //  ...and mutate request object read in hooks.js after the resolve...
-    request.locals.user = userEmail;
-    request.locals.sessionId = accessToken;
+    event.locals.user = userEmail;
+    event.locals.sessionId = accessToken;
     //  ...and finally set a cookie for later requests from the client
     return {
         status: 302,
