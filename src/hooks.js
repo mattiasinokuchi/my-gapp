@@ -42,22 +42,22 @@ async function getSessionFromApi(sessionId) {
 
 import cookie from 'cookie';
 
-export const handle = async ({ request, resolve }) => {
+export const handle = async ({ event, resolve }) => {
 	console.log('before endpoint call');
-	const cookies = cookie.parse(request.headers.cookie || '');
+	const cookies = cookie.parse(event.request.headers.get('cookie') || '');
 
 	// before endpoint call
 
-	request.locals.sessionId = cookies.sessionId;
+	event.locals.sessionId = cookies.sessionId;
 	//	request.locals.user = cookies.user;
 
 	// endpoint call
-	const response = await resolve(request);
+	const response = await resolve(event);
 
 	// after endpoint call
 	console.log('after endpoint call');
 
-	response.headers['set-cookie'] = `sessionId=${request.locals.sessionId || ''}; Path=/; HttpOnly`
+	response.headers['set-cookie'] = `sessionId=${event.locals.sessionId || ''}; Path=/; HttpOnly`
 	//	response.headers['set-cookie'] = `user=${request.locals.user || ''}; Path=/; HttpOnly`
 	return response
 }

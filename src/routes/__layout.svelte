@@ -5,8 +5,8 @@
 	export async function load({ session }) {
 		console.log('load layout');
 		if (
-			(page.path !== "/" && !session.sessionId) ||
-			(page.path !== "/" && session.sessionId === "")
+			(page.url.pathname !== "/" && !session.sessionId) ||
+			(page.url.pathname !== "/" && session.sessionId === "")
 		) {
 			return { redirect: "/", status: 302 };
 		}
@@ -19,22 +19,22 @@
 </svelte:head>
 <nav>
 	<a
-		class:active={$page.path.match(/product/)}
+		class:active={$page.url.pathname.match(/product/)}
 		sveltekit:prefetch
 		href="/product">PRODUCTS</a
 	>
 	<a
-		class:active={$page.path.match(/customer/)}
+		class:active={$page.url.pathname.match(/customer/)}
 		sveltekit:prefetch
 		href="/customer">CUSTOMERS</a
 	>
 	<a
-		class:active={$page.path.match(/deliver/)}
+		class:active={$page.url.pathname.match(/deliver/)}
 		sveltekit:prefetch
 		href="/deliver">DELIVERY</a
 	>
 	<a
-		class:active={$page.path.match(/billing/)}
+		class:active={$page.url.pathname.match(/billing/)}
 		sveltekit:prefetch
 		href="/billing">BILLING</a
 	>
