@@ -2,7 +2,9 @@
 
 const url = `https://${process.env.AUTH0_DOMAIN}/passwordless/start`;
 
-export async function post(request) {
+export const post = async (event) => {
+    const data = await event.request.formData();
+    console.log(data.get('email'));
     await fetch(url, {
         method: 'POST',
         headers: {
@@ -13,7 +15,7 @@ export async function post(request) {
             client_id: process.env.AUTH0_CLIENT_ID,
             client_secret: process.env.AUTH0_CLIENT_SECRET,
             connection: 'email',
-            email: request.body.get('email'),
+            email: data.get('email'),
             send: 'link',
             authParams: {
                 scope: 'openid email',
@@ -24,7 +26,7 @@ export async function post(request) {
     });
     return {
         status: 303,
-        location: request.headers.referer,
-        body: 'Please log in using the magic link sent to ' + request.body.get('email') + '!'
+        location: '/',
+        body: 'Please log in using the magic link sent to ' + data.get('email') + '!'
     }
 }

@@ -43,10 +43,9 @@ async function getSessionFromApi(sessionId) {
 import cookie from 'cookie';
 
 export const handle = async ({ event, resolve }) => {
+	// before endpoint call
 	console.log('before endpoint call');
 	const cookies = cookie.parse(event.request.headers.get('cookie') || '');
-
-	// before endpoint call
 
 	event.locals.sessionId = cookies.sessionId;
 	//	request.locals.user = cookies.user;
