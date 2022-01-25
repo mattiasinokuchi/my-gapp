@@ -17,17 +17,9 @@ export const get = async (event) => {
     //  ...and mutate request object read in hooks.js after the resolve...
     event.locals.user = userEmail;
     event.locals.sessionId = accessToken;
-    //  ...and finally set a cookie for later requests from the client
     return {
         status: 302,
         headers: {
-            'Set-Cookie': cookie.serialize('sessionId', accessToken, {
-                path: '/',
-                httpOnly: true,
-                sameSite: 'strict',
-                secure: process.env.NODE_ENV === 'production',
-                maxAge: 604800
-            }),
             location: '/'
         }
     }
