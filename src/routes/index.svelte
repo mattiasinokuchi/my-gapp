@@ -1,58 +1,16 @@
 <script context="module">
     export async function load({ session }) {
-        console.log('load page');
-        return {
-            props: {
-                session: session.sessionId,
-//                user: session.user,
-            },
-        };
-    }
-
-    /*
-    export async function load({ session }) {
-        if (session.user) {
-            return {
-                status: 303,
-                redirect: "/product",
-            };
+        console.log('load login page');
+        console.log('sessionId: ' + session.sessionId)
+        if (session.sessionId) {
+            return { redirect: "/product", status: 302 };
         }
         return {
-            props: {
-                user: session.user,
-            },
+            props: {},
         };
     }
-    */
 </script>
 
-<script>
-    export let session;
-//    export let user;
-</script>
-
-{#if session}
-<!--{#if user}
-    <h2>Welcome {user}</h2>-->
-    <h2>Welcome</h2>
-    <form action="/logout">
-        <button>Logout</button>
-    </form>
-{:else}
-    <form action="/login" method="post">
-        <p>I'm stepping in.</p>
-        <p>Send a magic link to</p>
-        <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="me@domain.tld"
-        />
-        <input type="submit" value="Submit" />
-    </form>
-{/if}
-
-<!--
 <main>
     <form action="/login" method="post">
         <p>I'm stepping in.</p>
@@ -84,4 +42,3 @@
         right: 25%;
     }
 </style>
--->

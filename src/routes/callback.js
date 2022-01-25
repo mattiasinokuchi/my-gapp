@@ -3,7 +3,7 @@
 import cookie from 'cookie';
 
 export const get = async (event) => {
-    console.log('endpoint');
+    console.log('callback endpoint');
     //  ...gets the code from Auth0...
     const url = new URL (event.url.href);
     const params = new URLSearchParams(url.search);
@@ -31,7 +31,6 @@ export const get = async (event) => {
             location: '/'
         }
     }
-
 }
 
 async function getAccessToken(code, redirectToHost) {

@@ -3,8 +3,8 @@
 const url = `https://${process.env.AUTH0_DOMAIN}/passwordless/start`;
 
 export const post = async (event) => {
+    console.log('login endpoint');
     const data = await event.request.formData();
-    console.log(data.get('email'));
     await fetch(url, {
         method: 'POST',
         headers: {
@@ -25,7 +25,7 @@ export const post = async (event) => {
         })
     });
     return {
-        status: 303,
+        status: 302,
         location: '/',
         body: 'Please log in using the magic link sent to ' + data.get('email') + '!'
     }

@@ -1,22 +1,17 @@
-<script>
+<script context="module">
 	import "../app.css";
 	import { page } from "$app/stores";
-	
-	export async function load({ session }) {
-		console.log('load layout');
-		if (
-			(page.url.pathname !== "/" && !session.sessionId) ||
-			(page.url.pathname !== "/" && session.sessionId === "")
-		) {
+
+	export async function load({ url, session }) {
+		if (url.pathname !== "/" && !session.sessionId) {
 			return { redirect: "/", status: 302 };
 		}
-		return { props: {} };
+		return {
+			props: {},
+		}
 	}
 </script>
 
-<svelte:head>
-	<meta name="robots" content="noindex" />
-</svelte:head>
 <nav>
 	<a
 		class:active={$page.url.pathname.match(/product/)}
