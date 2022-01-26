@@ -1,9 +1,8 @@
 <!--	This is the delivery page	-->
 <script context="module">
-	export async function load({ fetch, page }) {
+	export async function load({ fetch, params }) {
 		try {
-			const { delivery_date } = page.params;
-			let res = await fetch(`/deliver/${delivery_date}.json`);
+			let res = await fetch(`/deliver/${params.delivery_date}.json`);
 			const delivery = await res.json();
 			res = await fetch(`/deliver/get_todays_deliveries.json`);
 			const todays_delivery = await res.json();

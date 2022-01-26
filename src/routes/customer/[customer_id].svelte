@@ -1,16 +1,15 @@
 <!--    This is a specific customers page   -->
 <script context="module">
-    export async function load({ fetch, page }) {
-        const { customer_id } = page.params;
+    export async function load({ fetch, params }) {
         let res = null;
         try {
-            res = await fetch(`/customer/${customer_id}.json`);
+            res = await fetch(`/customer/${params.customer_id}.json`);
             const customer = await res.json();
-            res = await fetch(`/customer/get_order/${customer_id}.json`);
+            res = await fetch(`/customer/get_order/${params.customer_id}.json`);
             const order = await res.json();
             res = await fetch(`/customer/get_product_options.json`);
             const option = await res.json();
-            res = await fetch(`/customer/get_time_out/${customer_id}.json`);
+            res = await fetch(`/customer/get_time_out/${params.customer_id}.json`);
             const time_out = await res.json();
             return {
                 props: {

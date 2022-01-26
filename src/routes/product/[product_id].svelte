@@ -1,8 +1,7 @@
 <!--    This is a specific product page   -->
 <script context="module">
-    export async function load({ fetch, page }) {
-        const { product_id } = page.params;
-        const res = await fetch(`/product/${product_id}.json`);
+    export async function load({ fetch, params }) {
+        const res = await fetch(`/product/${params.product_id}.json`);
         if (res.ok) {
             const product = await res.json();
             return {
