@@ -50,8 +50,9 @@ async function getUserEmail(accessToken) {
     return user.email;
 }
 
+//	store session with in-memory database API (to keep authentication fast) for 12h
 async function cacheUser(accessToken, userEmail) {
-    await fetch(`${process.env.UPSTASH_REDIS_REST_URL}/set/${accessToken}/${userEmail}/EX/604800`, {
+    await fetch(`${process.env.UPSTASH_REDIS_REST_URL}/set/${accessToken}/${userEmail}/EX/43200`, {
         headers: {
             Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`
         }

@@ -25,7 +25,7 @@ export const handle = async ({ event, resolve }) => {
                 httpOnly: true,
 //                sameSite: 'strict',	redirection after login not working when enabled
                 secure: process.env.NODE_ENV === 'production',
-                maxAge: 604800
+//                maxAge: 604800
 			})
 		);
 		response.headers.append(
@@ -35,7 +35,7 @@ export const handle = async ({ event, resolve }) => {
                 httpOnly: true,
 //                sameSite: 'strict',	redirection after login not working when enabled
                 secure: process.env.NODE_ENV === 'production',
-                maxAge: 604800
+//                maxAge: 604800
 			})
 		);
 	}
@@ -48,14 +48,14 @@ export const handle = async ({ event, resolve }) => {
 	return response;
 }
 
+//	pass users email to page (not executed by prefetch)
 export async function getSession(event) {
-	//	pass users email to page (not executed by prefetch)
 	return {
 		user: event.locals.user
 	}
 }
 
-//	Fast database API (in-memory) used to persist authentication
+//	get session from in-memory database API (to keep authentication fast)
 async function getSessionFromApi(sessionId) {
 	const res = await fetch(`${process.env.UPSTASH_REDIS_REST_URL}/get/${sessionId}`, {
 		headers: {

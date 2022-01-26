@@ -17,7 +17,7 @@
             type="email"
             name="email"
             id="email"
-            placeholder="me@here.now"
+            placeholder="me@email.now"
         />
         <input type="submit" value="Submit" />
     </form>
