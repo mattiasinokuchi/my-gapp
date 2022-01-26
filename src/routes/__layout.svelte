@@ -1,8 +1,10 @@
 <script context="module">
+	//	not executed by prefetch
 	import "../app.css";
 	import { page } from "$app/stores";
 
 	export async function load({ url, session }) {
+		console.log('__layout.svelte');
 		if (url.pathname !== "/" && !session.sessionId) {
 			return { redirect: "/", status: 302 };
 		}

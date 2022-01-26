@@ -3,7 +3,12 @@ import cookie from 'cookie';
 export const handle = async ({ event, resolve }) => {
 	console.log('handle');
 	const cookies = cookie.parse(event.request.headers.get('cookie') || '');
-	event.locals.sessionId = cookies.sessionId || null;
+	const session = await getSessionFromApi(cookies.sessionId);
+	if (session.result) {
+		event.locals.sessionId = cookies.sessionId;
+	} else {
+		event.locals.sessionId = null;
+	}
 	const response = await resolve(event);
 	if (event.locals.sessionId) {
 		response.headers.set(
@@ -18,9 +23,10 @@ export const handle = async ({ event, resolve }) => {
 		);
 	}
 	return response;
-};
+}
 
 export async function getSession(event) {
+	//	not executed by prefetch
 	console.log('getSession');
 	return {
 		sessionId: event.locals.sessionId
