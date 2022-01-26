@@ -1,6 +1,6 @@
 <script context="module">
     export async function load({ session }) {
-        if (session.sessionId) {
+        if (session.user) {
             return { redirect: "/product", status: 302 };
         }
         return {
@@ -17,7 +17,7 @@
             type="email"
             name="email"
             id="email"
-            placeholder="me@domain.tld"
+            placeholder="me@here.now"
         />
         <input type="submit" value="Submit" />
     </form>

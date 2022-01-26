@@ -49,9 +49,9 @@ export const handle = async ({ event, resolve }) => {
 }
 
 export async function getSession(event) {
-	//	pass session to page (not executed by prefetch)
+	//	pass users email to page (not executed by prefetch)
 	return {
-		sessionId: event.locals.sessionId
+		user: event.locals.user
 	}
 }
 

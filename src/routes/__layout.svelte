@@ -4,7 +4,7 @@
 	import { page } from "$app/stores";
 
 	export async function load({ url, session }) {
-		if (url.pathname !== "/" && !session.sessionId) {
+		if (url.pathname !== "/" && !session.user) {
 			return { redirect: "/", status: 302 };
 		}
 		return {
