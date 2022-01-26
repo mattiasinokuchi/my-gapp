@@ -5,7 +5,12 @@ import { pool } from '$lib/db';
 
 //  Update customer subscription status
 export const post = async (request) => {
-    console.log('Hej!');
+    if (!request.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    }
     const values = [
         request.body.get('subscribe'),
         request.body.get('customer_id')

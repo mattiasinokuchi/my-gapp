@@ -4,7 +4,13 @@
 import { pool } from '$lib/db';
 
 //  Reads all customers
-export const get = async (_) => {
+export const get = async (request) => {
+    if (!request.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    }
     const res = await pool.query(`
         SELECT id AS customer_id, *
         FROM customer_table
@@ -17,6 +23,12 @@ export const get = async (_) => {
 
 //  Adds a new customer
 export const post = async (request) => {
+    if (!request.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    }
     try {
         /*  Avoids string concatenating parameters into the
             query text directly to prevent sql injection    */

@@ -5,9 +5,12 @@ import { pool } from '$lib/db';
 
 //  Deletes a customer order
 export const del = async (request) => {
-    /*if (!request.locals.user) {
-        return { status: 401 };
-    }*/
+    if (!request.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    }
     try {
         /*  Avoids string concatenating parameters into the
             query text directly to prevent sql injection    */

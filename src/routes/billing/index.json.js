@@ -4,7 +4,13 @@
 import { pool } from '$lib/db';
 
 //  Read deliveries...
-export const get = async (_) => {
+export const get = async (request) => {
+    if (!request.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    }
     try {
         const res = await pool.query(`
             SELECT
@@ -57,9 +63,12 @@ export const get = async (_) => {
 
 //  Delete deliveries
 export const del = async (request) => {
-    /*if (!request.locals.user) {
-        return { status: 401 };
-    }*/
+    if (!request.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    }
     try {
         await pool.query(`
         DELETE FROM delivery_table

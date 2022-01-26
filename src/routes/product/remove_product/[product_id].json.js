@@ -6,9 +6,12 @@ import { pool } from '$lib/db';
 /*  Deletes a product
     Client instance must be used in transaction with PostgreSQL.    */
 export const del = async (request) => {
-    /*if (!request.locals.user) {
-        return { status: 401 };
-    }*/
+    if (!request.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    }
     const client = await pool.connect();
     try {
         await client.query('BEGIN');

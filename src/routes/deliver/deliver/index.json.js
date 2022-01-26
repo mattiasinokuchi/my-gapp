@@ -6,6 +6,12 @@ import { pool } from '$lib/db';
 /*  Register a delivery.
     Client instance must be used in transaction using node-postgres */
 export const post = async (request) => {
+    if (!request.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    }
     const client = await pool.connect();
     const values = [
         request.body.get('customer_id'),

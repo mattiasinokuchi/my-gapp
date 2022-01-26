@@ -7,6 +7,12 @@ import { pool } from '$lib/db';
     Avoids string concatenating parameters into the
     query text directly to prevent sql injection    */
 export const post = async (request) => {
+    if (!request.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    }
     try {
         if (request.body.get('start_date')) {
             await pool.query(

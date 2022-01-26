@@ -5,6 +5,12 @@ import { pool } from '$lib/db';
 
 //  Update customer information
 export const post = async (request) => {
+    if (!request.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    }
     try {
         /*  Avoids string concatenating parameters into the
             query text directly to prevent sql injection    */

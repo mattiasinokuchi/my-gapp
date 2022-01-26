@@ -4,7 +4,13 @@
 import { pool } from '$lib/db';
 
 //  Reads all active customers phone numbers
-export const get = async (_) => {
+export const get = async (request) => {
+    if (!request.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    }
     const res = await pool.query(`
         SELECT telephone
         FROM customer_table

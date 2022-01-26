@@ -4,7 +4,13 @@
 import { pool } from '$lib/db';
 
 //  Read deliveries made today
-export const get = async (_) => {
+export const get = async (request) => {
+    if (!request.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    }
     try {
         const res = await pool.query(`
             SELECT

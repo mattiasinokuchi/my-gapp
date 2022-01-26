@@ -6,6 +6,12 @@ import { pool } from '$lib/db';
 /*  Avoids string concatenating parameters into the
     query text directly to prevent sql injection    */
 export const post = async (request) => {
+    if (!request.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    }
     try {
         await pool.query(
             `INSERT INTO time_out_table(customer_id, start_time, end_time)

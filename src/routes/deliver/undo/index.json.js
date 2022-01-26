@@ -9,9 +9,12 @@ import { pool } from '$lib/db';
     query text directly to prevent sql injection    */
 
 export const del = async (request) => {
-    /*if (!request.locals.user) {
-        return { status: 401 };
-    }*/
+    if (!request.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    }
     const client = await pool.connect();
     try {
         await client.query('BEGIN');

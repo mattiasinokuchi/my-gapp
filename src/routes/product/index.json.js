@@ -4,7 +4,13 @@
 import { pool } from '$lib/db';
 
 //  Read all products
-export const get = async (_) => {
+export const get = async (request) => {
+    if (!request.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    }
     const res = await pool.query(`
         SELECT id AS product_id, *
         FROM product_table`);
@@ -15,6 +21,12 @@ export const get = async (_) => {
 
 //  Add a new product
 export const post = async (request) => {
+    if (!request.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    }
     const values = [
         request.body.get('product_name'),
         request.body.get('price'),

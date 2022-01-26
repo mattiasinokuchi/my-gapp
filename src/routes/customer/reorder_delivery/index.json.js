@@ -7,6 +7,12 @@ import { pool } from '$lib/db';
     Avoids string concatenating parameters into the
     query text directly to prevent sql injection    */
 export const post = async (request) => {
+    if (!request.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    }
     const client = await pool.connect();
     const new_order = request.body.get('delivery_order');
     const customer_id = request.body.get('customer_id');
