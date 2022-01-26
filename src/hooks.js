@@ -6,14 +6,25 @@ export const handle = async ({ event, resolve }) => {
 	const session = await getSessionFromApi(cookies.sessionId);
 	if (session.result) {
 		event.locals.sessionId = cookies.sessionId;
+		event.locals.user = session.result;
 	} else {
 		event.locals.sessionId = null;
 	}
 	const response = await resolve(event);
 	if (event.locals.sessionId) {
-		response.headers.set(
+		response.headers.append(
 			'set-cookie',
 			cookie.serialize('sessionId', event.locals.sessionId, {
+                path: '/',
+                httpOnly: true,
+//                sameSite: 'strict',	redirection after login not working when enabled
+                secure: process.env.NODE_ENV === 'production',
+                maxAge: 604800
+			})
+		);
+		response.headers.append(
+			'set-cookie',
+			cookie.serialize('user', event.locals.user, {
                 path: '/',
                 httpOnly: true,
 //                sameSite: 'strict',	redirection after login not working when enabled
