@@ -1,7 +1,6 @@
 /*  Endpoint for callback from authentication...   */
 
 export const get = async (event) => {
-    console.log('callback endpoint');
     //  ...gets the code from Auth0...
     const url = new URL (event.url.href);
     const params = new URLSearchParams(url.search);
@@ -13,7 +12,6 @@ export const get = async (event) => {
     //  ...and cache for later use in hooks.js...
     await cacheUser(accessToken, userEmail);
     //  ...and mutate request object read in hooks.js after the resolve...
-    event.locals.user = userEmail;
     event.locals.sessionId = accessToken;
     return {
         status: 302,

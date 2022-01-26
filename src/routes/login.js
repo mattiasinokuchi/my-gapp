@@ -3,7 +3,6 @@
 const url = `https://${process.env.AUTH0_DOMAIN}/passwordless/start`;
 
 export const post = async (event) => {
-    console.log('login endpoint');
     const data = await event.request.formData();
     await fetch(url, {
         method: 'POST',

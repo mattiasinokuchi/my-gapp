@@ -1,16 +1,22 @@
 import cookie from 'cookie';
 
 export const handle = async ({ event, resolve }) => {
-	console.log('handle');
+	//	get session id from cookie
 	const cookies = cookie.parse(event.request.headers.get('cookie') || '');
+	//	authenticate by finding session in cache
 	const session = await getSessionFromApi(cookies.sessionId);
+	//	request attachment to forward authenticated user
 	if (session.result) {
 		event.locals.sessionId = cookies.sessionId;
 		event.locals.user = session.result;
+	//	attachment to stop unauthenticated request
 	} else {
 		event.locals.sessionId = null;
+		event.locals.user = null;
 	}
+	//	pass request to endpoint
 	const response = await resolve(event);
+	//	set session id in cookie for future requests
 	if (event.locals.sessionId) {
 		response.headers.append(
 			'set-cookie',
@@ -33,17 +39,23 @@ export const handle = async ({ event, resolve }) => {
 			})
 		);
 	}
+	response.headers.append('X-Frame-Options', 'SAMEORIGIN');
+	response.headers.append('X-Content-Type-Options', 'nosniff');
+	response.headers.append('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+	response.headers.append('Content-Security-Policy', "img-src 'self'; script-src 'self' 'unsafe-inline'");
+	response.headers.append('X-XSS-Protection', '1; mode=block');
+	//	pass request to getSession before page is rendered
 	return response;
 }
 
 export async function getSession(event) {
-	//	not executed by prefetch
-	console.log('getSession');
+	//	pass session to page (not executed by prefetch)
 	return {
 		sessionId: event.locals.sessionId
 	}
 }
 
+//	Fast database API (in-memory) used to persist authentication
 async function getSessionFromApi(sessionId) {
 	const res = await fetch(`${process.env.UPSTASH_REDIS_REST_URL}/get/${sessionId}`, {
 		headers: {
@@ -53,17 +65,3 @@ async function getSessionFromApi(sessionId) {
 	const session = await res.json();
 	return session;
 }
-
-/*	...request is passed with some security headers...
-	return {
-		...response,
-		headers: {
-			...response.headers,
-			'X-Frame-Options': 'SAMEORIGIN',
-			'X-Content-Type-Options': 'nosniff',
-			'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
-			'Content-Security-Policy': "img-src 'self'; script-src 'self' 'unsafe-inline'",
-			'X-XSS-Protection': '1; mode=block'
-		},
-	}
-*/

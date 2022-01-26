@@ -1,7 +1,5 @@
 <script context="module">
     export async function load({ session }) {
-        console.log('load login page');
-//        console.log('sessionId: ' + session.sessionId)
         if (session.sessionId) {
             return { redirect: "/product", status: 302 };
         }
