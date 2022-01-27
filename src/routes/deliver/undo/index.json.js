@@ -8,13 +8,14 @@ import { pool } from '$lib/db';
     Avoids string concatenating parameters into the
     query text directly to prevent sql injection    */
 
-export const del = async (request) => {
-    if (!request.locals.user) {
+export const post = async (event) => {
+    if (!event.locals.user) {
         return {
             status: 401,
             body: 'Please log in!'
         }
     }
+    const data = await event.request.formData();
     const client = await pool.connect();
     try {
         await client.query('BEGIN');
@@ -54,7 +55,7 @@ export const del = async (request) => {
         return {
             status: 303,
             headers: {
-                location: request.headers.referer
+                location: `/deliver/${data.get('delivery_date')}`
             }
         };
     } catch (error) {

@@ -31,10 +31,14 @@
 			<h1>{delivery_date}</h1>
 			<button on:click={() => window.print()}>Print Out</button>
 			<!-- This is a undo buttton -->
-			<form action="/deliver/undo.json?_method=delete" method="post">
+			<form action="/deliver/undo.json" method="post">
+				<input
+					hidden
+					name="delivery_date"
+					value={delivery_date}
+				/>
 				<input
 					type="submit"
-					name="delivery_date"
 					value="Undo last delivery"
 					hidden={delivery_date !== today}
 					disabled={todays_delivery.length < 1}
