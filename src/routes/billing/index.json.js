@@ -15,11 +15,8 @@ export const get = async (request) => {
         const res = await pool.query(`
             SELECT
                 TO_CHAR(delivery_time :: DATE, 'yyyy-mm-dd') AS delivery_date,
-                customer_id,
-                first_name,
-                last_name,
-                product_name,
-                price
+                TO_CHAR(billing_date :: DATE, 'yyyy-mm-dd') AS bill_date,
+                *
             FROM delivery_table
             INNER JOIN customer_table
             ON customer_table.id = delivery_table.customer_id;
@@ -32,22 +29,22 @@ export const get = async (request) => {
                 const index = acc.findIndex(
                     accObject => accObject.customer_id === obj.customer_id
                 );
-                acc[index].to_pay = acc[index].to_pay + obj.price;
                 acc[index].delivery.push({
                     delivery_date: obj.delivery_date,
                     product_name: obj.product_name,
                     price: obj.price,
+                    billing_date: obj.bill_date
                 });
             } else {
                 acc.push({
                     customer_id: obj.customer_id,
                     first_name: obj.first_name,
                     last_name: obj.last_name,
-                    to_pay: obj.price,
                     delivery: [{
                         delivery_date: obj.delivery_date,
                         product_name: obj.product_name,
                         price: obj.price,
+                        billing_date: obj.bill_date
                     }]
                 });
             }
