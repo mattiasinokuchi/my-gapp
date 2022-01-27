@@ -4,7 +4,7 @@
 import { pool } from '$lib/db';
 
 //  Reads data for a specific customer
-export const get = async ({ params }, request) => {
+export const get = async (request) => {
     if (!request.locals.user) {
         return {
             status: 401,
@@ -12,12 +12,11 @@ export const get = async ({ params }, request) => {
         }
     }
     try {
-        const { customer_id } = params;
         const res = await pool.query(`
             SELECT id AS customer_id, *
             FROM customer_table
             WHERE id = $1
-            `, [customer_id]
+            `, [request.params.customer_id]
         );
         return {
             body: res.rows[0]
