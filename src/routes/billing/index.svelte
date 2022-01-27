@@ -40,7 +40,7 @@
 				</p>
 			{/each}
 			Total: ${to_pay}
-			<form action="/billing.json?_method=delete" method="post">
+			<form action="/billing.json" method="post">
 				<input hidden name="customer_id" value={customer_id} />
 				<input
 					type="submit"

@@ -62,7 +62,7 @@ export const get = async (request) => {
 }
 
 //  Delete deliveries
-export const del = async (event) => {
+export const post = async (event) => {
     if (!event.locals.user) {
         return {
             status: 401,
