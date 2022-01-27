@@ -4,13 +4,14 @@
 import { pool } from '$lib/db';
 
 //  Update a product
-export const post = async (request) => {
-    if (!request.locals.user) {
+export const post = async (event) => {
+    if (!event.locals.user) {
         return {
             status: 401,
             body: 'Please log in!'
         }
     }
+    const data = await event.request.formData();
     try {
         /*  Avoids string concatenating parameters into the
             query text directly to prevent sql injection    */
@@ -25,16 +26,16 @@ export const post = async (request) => {
                 id = $4;
             `,
             [
-                request.body.get('product_name'),
-                request.body.get('price'),
-                request.body.get('delivery_interval'),
-                request.body.get('product_id')
+                data.get('product_name'),
+                data.get('price'),
+                data.get('delivery_interval'),
+                data.get('product_id')
             ]
         );
         return {
             status: 303,
             headers: {
-                location: request.headers.referer
+                location: `/product/${data.get('product_id')}`
             }
         };
     } catch (error) {

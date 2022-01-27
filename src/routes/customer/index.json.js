@@ -22,13 +22,14 @@ export const get = async (request) => {
 };
 
 //  Adds a new customer
-export const post = async (request) => {
-    if (!request.locals.user) {
+export const post = async (event) => {
+    if (!event.locals.user) {
         return {
             status: 401,
             body: 'Please log in!'
         }
     }
+    const data = await event.request.formData();
     try {
         /*  Avoids string concatenating parameters into the
             query text directly to prevent sql injection    */
@@ -50,13 +51,13 @@ export const post = async (request) => {
                     FROM customer_table))
             RETURNING *`,
             [
-                request.body.get('first_name'),
-                request.body.get('last_name'),
-                request.body.get('street_address'),
-                request.body.get('postcode'),
-                request.body.get('city'),
-                request.body.get('telephone'),
-                request.body.get('email')
+                data.get('first_name'),
+                data.get('last_name'),
+                data.get('street_address'),
+                data.get('postcode'),
+                data.get('city'),
+                data.get('telephone'),
+                data.get('email')
             ]
         );
         return {

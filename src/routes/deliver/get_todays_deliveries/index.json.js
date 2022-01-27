@@ -4,8 +4,8 @@
 import { pool } from '$lib/db';
 
 //  Read deliveries made today
-export const get = async (request) => {
-    if (!request.locals.user) {
+export const get = async (event) => {
+    if (!event.locals.user) {
         return {
             status: 401,
             body: 'Please log in!'

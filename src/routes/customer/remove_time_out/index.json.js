@@ -3,25 +3,26 @@
 
 import { pool } from '$lib/db';
 
-export const del = async (request) => {
-    if (!request.locals.user) {
+export const post = async (event) => {
+    if (!event.locals.user) {
         return {
             status: 401,
             body: 'Please log in!'
         }
     }
+    const data = await event.request.formData();
     try {
         /*  Avoids string concatenating parameters into the
             query text directly to prevent sql injection    */
         await pool.query(`
             DELETE FROM time_out_table
             WHERE id = $1`,
-            [request.params.time_out_id]
+            [data.get('time_out_id')]
         );
         return {
             status: 303,
             headers: {
-                location: request.headers.referer
+                location: `/customer/${data.get('customer_id')}`
             }
         };
     } catch (error) {

@@ -9,7 +9,7 @@
 			return {
 				props: {
 					delivery,
-					delivery_date,
+					delivery_date: params.delivery_date,
 					todays_delivery,
 				},
 			};
@@ -34,6 +34,7 @@
 			<form action="/deliver/undo.json?_method=delete" method="post">
 				<input
 					type="submit"
+					name="delivery_date"
 					value="Undo last delivery"
 					hidden={delivery_date !== today}
 					disabled={todays_delivery.length < 1}
@@ -56,6 +57,7 @@
 						<input hidden name="customer_id" value={customer_id} />
 						<input hidden name="order_id" value={order_id} />
 						<input hidden name="price" value={price} />
+						<input hidden name="delivery_date" value={delivery_date} />
 						<input
 							hidden
 							name="product_name"

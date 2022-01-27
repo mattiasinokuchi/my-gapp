@@ -4,8 +4,8 @@
 import { pool } from '$lib/db';
 
 //  Read all products
-export const get = async (request) => {
-    if (!request.locals.user) {
+export const get = async (event) => {
+    if (!event.locals.user) {
         return {
             status: 401,
             body: 'Please log in!'
@@ -20,17 +20,18 @@ export const get = async (request) => {
 };
 
 //  Add a new product
-export const post = async (request) => {
-    if (!request.locals.user) {
+export const post = async (event) => {
+    if (!event.locals.user) {
         return {
             status: 401,
             body: 'Please log in!'
         }
     }
+    const data = await event.request.formData();
     const values = [
-        request.body.get('product_name'),
-        request.body.get('price'),
-        request.body.get('delivery_interval')
+        data.get('product_name'),
+        data.get('price'),
+        data.get('delivery_interval')
     ];
     try {
         await pool.query(`

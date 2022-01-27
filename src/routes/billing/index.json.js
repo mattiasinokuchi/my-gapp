@@ -62,19 +62,20 @@ export const get = async (request) => {
 }
 
 //  Delete deliveries
-export const del = async (request) => {
-    if (!request.locals.user) {
+export const del = async (event) => {
+    if (!event.locals.user) {
         return {
             status: 401,
             body: 'Please log in!'
         }
     }
+    const data = await event.request.formData();
     try {
         await pool.query(`
         DELETE FROM delivery_table
             WHERE customer_id = $1
             AND delivery_time :: DATE < CURRENT_DATE;  -- prevents interference with ongoing delivery
-            `, [request.body.get('customer_id')]
+            `, [data.get('customer_id')]
         );
         return {
             status: 303,

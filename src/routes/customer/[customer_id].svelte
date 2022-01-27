@@ -45,11 +45,13 @@
                 {#each time_out as { time_out_id, start_date, end_date }}
                     <li>
                         <form
-                            action="/customer/remove_time_out/{time_out_id}.json?_method=delete"
+                            action="/customer/remove_time_out.json"
                             method="post"
                             disabled={!customer.active}
                         >
                             {start_date} to {end_date}
+                            <input hidden name="time_out_id" value={time_out_id}>
+                            <input hidden name="customer_id" value={customer.customer_id}>
                             <button type="submit" disabled={!customer.active}
                                 >Delete</button
                             >
@@ -80,12 +82,14 @@
                 {#each order as { product_name, order_id, start_date }}
                     <li>
                         <form
-                            action="/customer/remove_order/{order_id}.json?_method=delete"
+                            action="/customer/remove_order.json"
                             method="post"
                             disabled={!customer.active}
                         >
                             {product_name}, (start/delivery {start_date})
                             <br>
+                            <input hidden name="customer_id" value={customer.customer_id}>
+                            <input hidden name="order_id" value={order_id}>
                             <button type="submit" disabled={!customer.active}
                                 >Delete</button
                             >

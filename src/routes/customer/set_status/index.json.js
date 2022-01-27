@@ -4,16 +4,17 @@
 import { pool } from '$lib/db';
 
 //  Update customer subscription status
-export const post = async (request) => {
-    if (!request.locals.user) {
+export const post = async (event) => {
+    if (!event.locals.user) {
         return {
             status: 401,
             body: 'Please log in!'
         }
     }
+    const data = await event.request.formData();
     const values = [
-        request.body.get('subscribe'),
-        request.body.get('customer_id')
+        data.get('subscribe'),
+        data.get('customer_id')
     ];
     try {
         /*  Avoids string concatenating parameters into the
@@ -28,7 +29,7 @@ export const post = async (request) => {
         return {
             status: 303,
             headers: {
-                location: request.headers.referer
+                location: `/customer/${data.get('customer_id')}`
             }
         };
     } catch (error) {

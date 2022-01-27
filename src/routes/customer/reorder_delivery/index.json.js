@@ -6,16 +6,17 @@ import { pool } from '$lib/db';
 /*  Client instance must be used in transaction with PostgreSQL.
     Avoids string concatenating parameters into the
     query text directly to prevent sql injection    */
-export const post = async (request) => {
-    if (!request.locals.user) {
+export const post = async (event) => {
+    if (!event.locals.user) {
         return {
             status: 401,
             body: 'Please log in!'
         }
     }
+    const data = await event.request.formData();
     const client = await pool.connect();
-    const new_order = request.body.get('delivery_order');
-    const customer_id = request.body.get('customer_id');
+    const new_order = data.get('delivery_order');
+    const customer_id = data.get('customer_id');
     let old_order = null;
     try {
         await client.query('BEGIN');

@@ -5,20 +5,21 @@ import { pool } from '$lib/db';
 
 /*  Register a delivery.
     Client instance must be used in transaction using node-postgres */
-export const post = async (request) => {
-    if (!request.locals.user) {
+export const post = async (event) => {
+    if (!event.locals.user) {
         return {
             status: 401,
             body: 'Please log in!'
         }
     }
+    const data = await event.request.formData();
     const client = await pool.connect();
     const values = [
-        request.body.get('customer_id'),
-        request.body.get('price'),
-        request.body.get('product_name'),
-        request.body.get('product_id'),
-        request.body.get('order_id')
+        data.get('customer_id'),
+        data.get('price'),
+        data.get('product_name'),
+        data.get('product_id'),
+        data.get('order_id')
     ];
     try {
         await client.query('BEGIN');
@@ -41,7 +42,7 @@ export const post = async (request) => {
             FROM order_table
             INNER JOIN product_table ON product_table.id = order_table.product_id
             WHERE order_table.id = ($1);
-            `, [request.body.get('order_id')]
+            `, [data.get('order_id')]
         );
         if (!res.rows[0].delivery_interval) {
             //  Delete the one-time order
@@ -49,14 +50,14 @@ export const post = async (request) => {
             DELETE
             FROM order_table
             WHERE id = $1
-            `, [request.body.get('order_id')]
+            `, [data.get('order_id')]
             );
         }
         await client.query('COMMIT');
         return {
             status: 303,
             headers: {
-                location: request.headers.referer
+                location: `/deliver/${data.get('delivery_date')}`
             }
         };
     } catch (error) {
