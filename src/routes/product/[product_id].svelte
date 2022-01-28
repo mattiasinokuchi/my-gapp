@@ -64,10 +64,11 @@
     >
     {#if showDelete}
         <form
-            action="/product/remove_product/{product.product_id}.json?_method=delete"
+            action="/product/remove_product.json"
             method="post"
         >
             <label for="button">Delete product with all orders?</label>
+            <input hidden name="product_id" value={product.product_id}>
             <input id="button" type="submit" value="I know what I'm doing" />
             <button on:click={() => (showDelete = false)}>Cancel</button>
         </form>

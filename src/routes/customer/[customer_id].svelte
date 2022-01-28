@@ -200,7 +200,7 @@
         >
         {#if showDelete}
             <form
-                action="/customer/{customer.customer_id}.json?_method=delete"
+                action="/customer/remove_customer.json"
                 method="post"
             >
                 <label for="button"
@@ -210,6 +210,11 @@
                     hidden
                     value={customer.delivery_order}
                     name="delivery_order"
+                />
+                <input
+                    hidden
+                    value={customer.customer_id}
+                    name="customer_id"
                 />
                 <input
                     id="button"

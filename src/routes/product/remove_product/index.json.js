@@ -5,13 +5,14 @@ import { pool } from '$lib/db';
 
 /*  Deletes a product
     Client instance must be used in transaction with PostgreSQL.    */
-export const del = async (request) => {
-    if (!request.locals.user) {
+export const post = async (event) => {
+    if (!event.locals.user) {
         return {
             status: 401,
             body: 'Please log in!'
         }
     }
+    const data = await event.request.formData();
     const client = await pool.connect();
     try {
         await client.query('BEGIN');
@@ -20,14 +21,14 @@ export const del = async (request) => {
             DELETE
             FROM order_table
             WHERE product_id = $1
-            `, [request.params.product_id]
+            `, [data.get('product_id')]
         );
         //  Delete product
         await client.query(`
             DELETE
             FROM product_table
             WHERE id = $1
-            `, [request.params.product_id]
+            `, [data.get('product_id')]
         );
         await client.query('COMMIT');
         return {
