@@ -1,9 +1,9 @@
-/*  This module contains the endpoint to the
+/*  This module contains endpoints to the
     database for the billing page   */
 
 import { pool } from '$lib/db';
 
-//  Set the billing date where it is missing
+//  Update a billing
 export const post = async (event) => {
     if (!event.locals.user) {
         return {
@@ -12,7 +12,6 @@ export const post = async (event) => {
         }
     }
     const data = await event.request.formData();
-    console.log(data.get('customer_id'));
     try {
         /*  Avoids string concatenating parameters into the
             query text directly to prevent sql injection    */
@@ -20,16 +19,21 @@ export const post = async (event) => {
             UPDATE
                 delivery_table
             SET
-                billing_date = CURRENT_DATE
+                delivery_time = $1,
+                billing_date = NULLIF ($2::text, '')::date
             WHERE
-                billing_date IS NULL AND
-                customer_id = $1;
-            `, [data.get('customer_id')]
+                id = $3;
+            `,
+            [
+                data.get('delivery_date'),
+                data.get('billing_date'),
+                data.get('delivery_id')
+            ]
         );
         return {
             status: 303,
             headers: {
-                location: '/billing/'
+                location: `/billing/`
             }
         };
     } catch (error) {
