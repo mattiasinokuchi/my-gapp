@@ -9,7 +9,9 @@
             const order = await res.json();
             res = await fetch(`/customer/get_product_options.json`);
             const option = await res.json();
-            res = await fetch(`/customer/get_time_out/${params.customer_id}.json`);
+            res = await fetch(
+                `/customer/get_time_out/${params.customer_id}.json`
+            );
             const time_out = await res.json();
             return {
                 props: {
@@ -36,11 +38,11 @@
 
 <main>
     <h1>{customer.first_name} {customer.last_name}</h1>
-    
+
     <!-- This is a list of subscription time-outs with delete buttons -->
-    <section class="box">
-        <h2>Subscription time-out</h2>
-        {#if time_out.length > 0}
+    {#if time_out.length > 0}
+        <section class="box">
+            <h2>Subscription time-out</h2>
             <ul>
                 {#each time_out as { time_out_id, start_date, end_date }}
                     <li>
@@ -50,8 +52,16 @@
                             disabled={!customer.active}
                         >
                             {start_date} to {end_date}
-                            <input hidden name="time_out_id" value={time_out_id}>
-                            <input hidden name="customer_id" value={customer.customer_id}>
+                            <input
+                                hidden
+                                name="time_out_id"
+                                value={time_out_id}
+                            />
+                            <input
+                                hidden
+                                name="customer_id"
+                                value={customer.customer_id}
+                            />
                             <button type="submit" disabled={!customer.active}
                                 >Delete</button
                             >
@@ -59,8 +69,8 @@
                     </li>
                 {/each}
             </ul>
-        {/if}
-    </section>
+        </section>
+    {/if}
 
     <!-- This is a form for subscription time-out -->
     <form action="/customer/add_time_out.json" method="post" class="whitebox">
@@ -75,9 +85,9 @@
     </form>
 
     <!-- This is a list of subscriptions/orders with delete buttons -->
-    <section class="box">
-        <h2>Subscriptions/orders</h2>
-        {#if order.length > 0}
+    {#if order.length > 0}
+        <section class="box">
+            <h2>Subscriptions/orders</h2>
             <ul>
                 {#each order as { product_name, order_id, start_date }}
                     <li>
@@ -87,9 +97,13 @@
                             disabled={!customer.active}
                         >
                             {product_name}, (start/delivery {start_date})
-                            <br>
-                            <input hidden name="customer_id" value={customer.customer_id}>
-                            <input hidden name="order_id" value={order_id}>
+                            <br />
+                            <input
+                                hidden
+                                name="customer_id"
+                                value={customer.customer_id}
+                            />
+                            <input hidden name="order_id" value={order_id} />
                             <button type="submit" disabled={!customer.active}
                                 >Delete</button
                             >
@@ -97,8 +111,8 @@
                     </li>
                 {/each}
             </ul>
-        {/if}
-    </section>
+        </section>
+    {/if}
 
     <!-- This is a form for adding products -->
     <form action="/customer/add_product.json" method="post" class="whitebox">
@@ -199,10 +213,7 @@
             >Delete Customer</button
         >
         {#if showDelete}
-            <form
-                action="/customer/remove_customer.json"
-                method="post"
-            >
+            <form action="/customer/remove_customer.json" method="post">
                 <label for="button"
                     >Delete customer with any unbilled deliveries?</label
                 >
@@ -211,11 +222,7 @@
                     value={customer.delivery_order}
                     name="delivery_order"
                 />
-                <input
-                    hidden
-                    value={customer.customer_id}
-                    name="customer_id"
-                />
+                <input hidden value={customer.customer_id} name="customer_id" />
                 <input
                     id="button"
                     type="submit"
