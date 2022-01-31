@@ -14,6 +14,7 @@ export const get = async (request) => {
     try {
         const res = await pool.query(`
             SELECT
+                delivery_table.id AS delivery_id,
                 TO_CHAR(delivery_time :: DATE, 'yyyy-mm-dd') AS delivery_date,
                 TO_CHAR(billing_date :: DATE, 'yyyy-mm-dd') AS bill_date,
                 *
@@ -30,6 +31,7 @@ export const get = async (request) => {
                     accObject => accObject.customer_id === obj.customer_id
                 );
                 acc[index].delivery.push({
+                    delivery_id: obj.delivery_id,
                     delivery_date: obj.delivery_date,
                     product_name: obj.product_name,
                     price: obj.price,
@@ -41,6 +43,7 @@ export const get = async (request) => {
                     first_name: obj.first_name,
                     last_name: obj.last_name,
                     delivery: [{
+                        delivery_id: obj.delivery_id,
                         delivery_date: obj.delivery_date,
                         product_name: obj.product_name,
                         price: obj.price,

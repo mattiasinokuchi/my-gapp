@@ -33,30 +33,40 @@
 			{#each delivery as { delivery_id, delivery_date, product_name, price, billing_date }}
 				<!-- This is a form for updating delivery and billing dates -->
 				<form action="">
-					<!-- This is a form to undo a delivery -->
-					<form action="">
-						<input hidden name="delivery_id" value={delivery_id} />
-						<input hidden={billing_date} type="submit" value="Undo" />
-					</form>
-					<span
-						hidden={!billing_date}
-						class:active={billing_date}
-						for="delivery_date"
-						>{delivery_date}:
-					</span>
-					<input
-						hidden={billing_date}
-						type="date"
-						name="delivery_date"
-						value={delivery_date}
-					/>
-					<span class:active={billing_date} for="product_name"
-						>{product_name}</span
-					>
-					<div id="billed">
-						<label hidden={!billing_date} for="billing_date"
-							>billed</label
+					<div id="unbilled">
+						<!-- This is a form to undo a delivery -->
+						<form action="/billing/remove_delivery.json" method="post">
+							<input
+								hidden
+								name="delivery_id"
+								value={delivery_id}
+							/>
+							<input
+								hidden={billing_date}
+								type="submit"
+								value="Undeliver"
+							/>
+						</form>
+						<span
+							hidden={!billing_date}
+							class:active={billing_date}
+							for="delivery_date"
+							>{delivery_date}:
+						</span>
+						<input
+							hidden={billing_date}
+							type="date"
+							name="delivery_date"
+							value={delivery_date}
+						/>
+						<span class:active={billing_date} for="product_name"
+							>{product_name} (${price})</span
 						>
+					</div>
+					<div id="billed">
+						<span hidden={!billing_date} for="billing_date"
+							>billed
+						</span>
 						<input
 							class="billing_date"
 							hidden={!billing_date}
@@ -66,10 +76,22 @@
 						/>
 						<!-- This is a form to undo a billing -->
 						<form action="/billing/update.json" method="post">
-							<input hidden name="delivery_id" value={delivery_id} />
-							<input hidden name="delivery_date" value={delivery_date} />
-							<input hidden name="billing_date" value="01-01-0001" />
-							<input hidden={!billing_date} type="submit" value="Undo" />
+							<input
+								hidden
+								name="delivery_id"
+								value={delivery_id}
+							/>
+							<input
+								hidden
+								name="delivery_date"
+								value={delivery_date}
+							/>
+							<input hidden name="billing_date" value="" />
+							<input
+								hidden={!billing_date}
+								type="submit"
+								value="Undo"
+							/>
 						</form>
 					</div>
 				</form>
@@ -77,16 +99,17 @@
 			<!-- This is a form to set multiple deliveries as billed -->
 			<form action="/billing/set_date.json" method="post">
 				<input hidden name="customer_id" value={customer_id} />
-				<input type="submit" value="Billed them all!" />
+				<input type="submit" value="Bill them all!" />
 			</form>
 		</div>
 	{/each}
 </main>
 
 <style>
-	#billed {
+	#unbilled, #billed {
 		display: flex;
 		align-items: center;
+		justify-content: center;
 	}
 	span.active {
 		text-decoration: line-through;
@@ -95,11 +118,7 @@
 	span {
 		color: black;
 	}
-	label {
-		color: black;
-		width: auto;
-	}
-	.billing_date {
+	input[type="date"] {
 		background-color: lemonchiffon;
 		border: none;
 	}
