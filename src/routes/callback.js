@@ -5,7 +5,6 @@ export const get = async (event) => {
     const url = new URL (event.url.href);
     const params = new URLSearchParams(url.search);
     const code = params.get('code');
-    console.log(code, event.url.host);
     //  ...to use when getting an access token...
     const accessToken = await getAccessToken(code, event.url.host);
     //  ...to use for validation and getting users email...
