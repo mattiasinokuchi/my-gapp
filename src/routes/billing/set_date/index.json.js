@@ -12,7 +12,6 @@ export const post = async (event) => {
         }
     }
     const data = await event.request.formData();
-    console.log(data.get('customer_id'));
     try {
         /*  Avoids string concatenating parameters into the
             query text directly to prevent sql injection    */

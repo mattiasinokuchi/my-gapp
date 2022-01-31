@@ -12,9 +12,6 @@ export const post = async (event) => {
         }
     }
     const data = await event.request.formData();
-    console.log(data.get('delivery_date'));
-    console.log(data.get('billing_date'));
-    console.log(data.get('delivery_id'));
     try {
         /*  Avoids string concatenating parameters into the
             query text directly to prevent sql injection    */

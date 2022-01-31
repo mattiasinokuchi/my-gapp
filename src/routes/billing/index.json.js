@@ -3,7 +3,6 @@
 
 import { pool } from '$lib/db';
 
-//  Read deliveries...
 export const get = async (request) => {
     if (!request.locals.user) {
         return {
@@ -12,6 +11,12 @@ export const get = async (request) => {
         }
     }
     try {
+        // Remove old and billed deliveries
+        await pool.query(`
+            DELETE FROM delivery_table
+            WHERE billing_date :: DATE < (CURRENT_DATE-90);
+        `);
+        //  Get deliveries...
         const res = await pool.query(`
             SELECT
                 delivery_table.id AS delivery_id,
