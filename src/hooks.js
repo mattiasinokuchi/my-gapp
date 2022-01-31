@@ -34,7 +34,7 @@ export const handle = async ({ event, resolve }) => {
                 path: '/',
                 httpOnly: true,
 //                sameSite: 'strict',	redirection after login not working when enabled
-                secure: process.env.NODE_ENV === 'production',
+//                secure: process.env.NODE_ENV === 'production',
 //                maxAge: 604800
 			})
 		);
