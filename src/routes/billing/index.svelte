@@ -18,8 +18,13 @@
 
 <script>
 	export let customer;
-	let prefix = "";
 
+	function allDeliveriesBilled(delivery) {
+		return delivery.every((element) => element.billing_date);
+	}
+
+	//	This a block of code for filtering customers
+	let prefix = "";
 	$: filteredCustomer = prefix
 		? customer.filter((person) => {
 				const name = `${person.last_name}, ${person.first_name}`;
@@ -34,7 +39,7 @@
 		<h2>Find customer</h2>
 		<input bind:value={prefix} placeholder="last name" />
 	</div>
-	
+
 	<h2 hidden={customer.length > 0}>No billing to do. Relax!</h2>
 
 	<!-- This is a list of customers to bill -->
@@ -103,7 +108,11 @@
 			<!-- This is a form to set multiple deliveries as billed -->
 			<form action="/billing/set_date.json" method="post">
 				<input hidden name="customer_id" value={customer_id} />
-				<input type="submit" value="Bill them all!" />
+				<input
+					type="submit"
+					value="Bill them all!"
+					hidden={(() => allDeliveriesBilled(delivery))()}
+				/>
 			</form>
 		</div>
 	{/each}
