@@ -18,13 +18,27 @@
 
 <script>
 	export let customer;
+	let prefix = "";
+
+	$: filteredCustomer = prefix
+		? customer.filter((person) => {
+				const name = `${person.last_name}, ${person.first_name}`;
+				return name.toLowerCase().startsWith(prefix.toLowerCase());
+		  })
+		: customer;
 </script>
 
 <main>
+	<!-- This is a field for finding customers	-->
+	<div class="whitebox">
+		<h2>Find customer</h2>
+		<input bind:value={prefix} placeholder="last name" />
+	</div>
+	
 	<h2 hidden={customer.length > 0}>No billing to do. Relax!</h2>
 
 	<!-- This is a list of customers to bill -->
-	{#each customer as { first_name, last_name, delivery, customer_id }}
+	{#each filteredCustomer as { first_name, last_name, delivery, customer_id }}
 		<div class="box">
 			<h2>
 				{first_name}
