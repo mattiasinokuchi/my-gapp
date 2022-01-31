@@ -9,7 +9,7 @@
     "start": "node build"
   },
   "devDependencies": {
-    "@sveltejs/adapter-auto": "next",
+    "@sveltejs/adapter-node": "next",
     "@sveltejs/kit": "next",
     "env-cmd": "^10.1.0",
     "svelte": "^3.44.0"
