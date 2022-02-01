@@ -6,7 +6,7 @@ export const handle = async ({ event, resolve }) => {
 	//	authenticate by finding session in cache
 	const session = await getSessionFromApi(cookies.sessionId);
 	//	request attachment to forward authenticated user
-	if (session.result) {
+	if (session.result !== 'undefined') {
 		event.locals.sessionId = cookies.sessionId;
 		event.locals.user = session.result;
 	//	attachment to stop unauthenticated request
