@@ -36,8 +36,7 @@
 <main>
 	<!-- This is a field for finding customers	-->
 	<div class="whitebox">
-		<h2>Find customer</h2>
-		<input bind:value={prefix} placeholder="last name" />
+		<input bind:value={prefix} placeholder="filter by surname" />
 	</div>
 
 	<h2 hidden={customer.length > 0}>No billing to do. Relax!</h2>
@@ -53,14 +52,6 @@
 				<!-- This is a form for updating delivery and billing dates -->
 				<div id="unbilled">
 					<!-- This is a form to undo a delivery -->
-					<form action="/billing/remove_delivery.json" method="post">
-						<input hidden name="delivery_id" value={delivery_id} />
-						<input
-							hidden={billing_date}
-							type="submit"
-							value="Undeliver"
-						/>
-					</form>
 					<span
 						hidden={!billing_date}
 						class:active={billing_date}
@@ -69,13 +60,22 @@
 					</span>
 					<input
 						hidden={billing_date}
-						type="date"
+						type="text"
 						name="delivery_date"
 						value={delivery_date}
+						size="10"
 					/>
 					<span class:active={billing_date} for="product_name"
 						>{product_name} (${price})</span
 					>
+					<form action="/billing/remove_delivery.json" method="post">
+						<input hidden name="delivery_id" value={delivery_id} />
+						<input
+							hidden={billing_date}
+							type="submit"
+							value="Undeliver"
+						/>
+					</form>
 				</div>
 				<div id="billed">
 					<span hidden={!billing_date} for="billing_date"
@@ -84,9 +84,10 @@
 					<input
 						class="billing_date"
 						hidden={!billing_date}
-						type="date"
+						type="text"
 						name="billing_date"
 						value={billing_date}
+						size="10"
 					/>
 					<!-- This is a form to undo a billing -->
 					<form action="/billing/update.json" method="post">
@@ -132,7 +133,7 @@
 	span {
 		color: black;
 	}
-	input[type="date"] {
+	input[type="text"] {
 		background-color: lemonchiffon;
 		border: none;
 	}

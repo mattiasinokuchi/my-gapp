@@ -84,10 +84,9 @@
 		</div>
 	</form>
 
-	<!-- This is a field for finding customers	-->
+	<!-- This is a field for filtering customers	-->
 	<div class="whitebox">
-		<h2>Find customer</h2>
-		<input bind:value={prefix} placeholder="last name" />
+		<input bind:value={prefix} placeholder="filter by surname" />
 	</div>
 
 	<h3 hidden={customer.length > 0}>No customers. Add someone!</h3>
