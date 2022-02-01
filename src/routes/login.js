@@ -19,7 +19,8 @@ export const post = async (event) => {
             authParams: {
                 scope: 'openid email',
                 response_type: 'code',
-                state: 'YOUR_STATE'
+                state: 'YOUR_STATE',
+                redirect_uri: event.url.origin + '/callback'
             }
         })
     });
