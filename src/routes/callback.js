@@ -6,7 +6,7 @@ export const get = async (event) => {
     const params = new URLSearchParams(url.search);
     const code = params.get('code');
     //  ...to use when getting an access token...
-    const accessToken = await getAccessToken(code, event.url.host);
+    const accessToken = await getAccessToken(code, event.url.origin);
     //  ...to use for validation and getting users email...
     const userEmail = await getUserEmail(accessToken)
     //  ...and cache for later use in hooks.js...
@@ -21,7 +21,7 @@ export const get = async (event) => {
     }
 }
 
-async function getAccessToken(code, redirectToHost) {
+async function getAccessToken(code, origin) {
     const res = await fetch(`https://${process.env.AUTH0_DOMAIN}/oauth/token`, {
         method: 'POST',
         headers: {
@@ -32,7 +32,7 @@ async function getAccessToken(code, redirectToHost) {
             client_id: process.env.AUTH0_CLIENT_ID,
             client_secret: process.env.AUTH0_CLIENT_SECRET,
             code: code,
-            redirect_uri: 'http://' + redirectToHost + '/callback'
+            redirect_uri: origin + '/callback'
         })
     });
     const token = await res.json();
