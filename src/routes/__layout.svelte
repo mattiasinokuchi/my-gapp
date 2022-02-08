@@ -8,9 +8,15 @@
 			return { redirect: "/", status: 302 };
 		}
 		return {
-			props: {},
-		}
+			props: {
+				demoMode: process.env.DEMO_MODE,
+			},
+		};
 	}
+</script>
+
+<script>
+	export let demoMode;
 </script>
 
 <nav>
@@ -36,6 +42,8 @@
 	>
 </nav>
 
+<div hidden={!demoMode}>This is a demo. Everyone can see this.</div>
+
 <main>
 	<slot />
 </main>
@@ -59,5 +67,9 @@
 		text-decoration: none;
 		color: salmon;
 		margin-right: 1rem;
+	}
+	div {
+		text-align: center;
+		color: gray;
 	}
 </style>
