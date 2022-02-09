@@ -49,13 +49,14 @@
 		<h2 hidden={delivery.length > 0}>No more delivery to do. Relax!</h2>
 
 		<!-- This is a list of customers and products to deliver-->
-		{#each delivery as { customer_id, first_name, last_name, street_address, city, orders }}
+		{#each delivery as { customer_id, first_name, last_name, place_of_delivery, street_address, city, orders }}
 			<div class="box">
 				<h2>
 					{first_name}
 					{last_name}:
 				</h2>
-				<p>{street_address}, {city}</p>
+				<p hidden={!place_of_delivery}>Place of delivery: {place_of_delivery}</p>
+				<p hidden={place_of_delivery}>{street_address}, {city}</p>
 				{#each orders as { order_id, product_name, product_id, price }}
 					<form action="/deliver/deliver.json" method="post">
 						<input hidden name="customer_id" value={customer_id} />
@@ -81,11 +82,12 @@
 	<!-- This is for printers -->
 	<div id="print">
 		<!-- This is a list of customers and products to deliver-->
-		{#each delivery as { first_name, last_name, street_address, city, orders }}
+		{#each delivery as { first_name, last_name, place_of_delivery, street_address, city, orders }}
 			<div id="customer">
 				<p>
-					{first_name}
-					{last_name}, {street_address}, {city}
+					{first_name} {last_name},
+					<span hidden={!place_of_delivery}>Place of delivery: {place_of_delivery}</span>
+					<span hidden={place_of_delivery}>{street_address}, {city}</span> 
 				</p>
 				<ul>
 					{#each orders as { product_name }}

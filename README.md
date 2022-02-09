@@ -38,7 +38,9 @@ CREATE TABLE customer_table (
 	telephone TEXT NOT NULL,
 	email TEXT NOT NULL,
 	active BOOLEAN NOT NULL DEFAULT TRUE,
-	delivery_order INT
+	delivery_order INT,
+	place_of_delivery TEXT,
+	notes TEXT
 );
 
 INSERT INTO customer_table(

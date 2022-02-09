@@ -67,6 +67,7 @@ export const get = async (event) => {
                     customer_id: obj.customer_id,
                     first_name: obj.first_name,
                     last_name: obj.last_name,
+                    place_of_delivery: obj.place_of_delivery,
                     street_address: obj.street_address,
                     city: obj.city,
                     orders: [{

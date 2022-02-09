@@ -25,9 +25,10 @@ export const post = async (event) => {
                 postcode = $4,
                 city = $5,
                 telephone = $6,
-                email = $7
+                email = $7,
+                place_of_delivery = $8
             WHERE
-                id = $8
+                id = $9
             `,
             [
                 data.get('first_name'),
@@ -37,6 +38,7 @@ export const post = async (event) => {
                 data.get('city'),
                 data.get('telephone'),
                 data.get('email'),
+                data.get('place_of_delivery'),
                 data.get('customer_id')
             ]
         );

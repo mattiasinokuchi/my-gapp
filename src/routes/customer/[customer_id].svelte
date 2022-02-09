@@ -204,6 +204,15 @@
                 value={customer.email}
             />
         </p>
+        <p>
+            <label for="place_of_delivery">Place of delivery</label>
+            <input
+                type="text"
+                id="place_of_delivery"
+                name="place_of_delivery"
+                value={customer.place_of_delivery}
+            />
+        </p>
         <input type="submit" value="Update" />
     </form>
 
