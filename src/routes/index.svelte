@@ -11,7 +11,7 @@
 
 <main>
     <form action="/login" method="post">
-        <p>I'm stepping in.</p>
+        <p>I'm stepping in<sup>*</sup></p>
         <p>Send a magic link to</p>
         <input
             type="email"
@@ -21,6 +21,18 @@
         />
         <input type="submit" value="Submit" />
     </form>
+    <footer>
+        <sup>*)</sup>
+        I don't mind a
+        <a
+            href="https://en.wikipedia.org/wiki/HTTP_cookie"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            web cookie
+        </a
+        > and having my email address stored privately for a while
+    </footer>
 </main>
 
 <style>
@@ -39,4 +51,14 @@
         left: 25%;
         right: 25%;
     }
+    footer {
+        position: fixed;
+        bottom: 10%;
+        left: 25%;
+        right: 25%;
+    }
+    a {
+    text-decoration: underline;
+    color: black;
+}
 </style>
