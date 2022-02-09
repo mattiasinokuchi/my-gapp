@@ -4,9 +4,13 @@
 import { pool } from '$lib/db';
 
 //  Reads all orders for a specific customer
-export const get = async ({ params }) => {
-    try {
-        const { customer_id } = params;
+export const get = async (event) => {
+    if (!event.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    } try {
         const res = await pool.query(`
             SELECT
                 order_table.id AS order_id,
@@ -16,7 +20,7 @@ export const get = async ({ params }) => {
             INNER JOIN product_table
             ON product_table.id = order_table.product_id
             WHERE customer_id = $1
-            `, [customer_id]);
+            `, [event.params.customer_id]);
         return {
             body: res.rows
         }

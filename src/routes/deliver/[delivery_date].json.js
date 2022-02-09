@@ -4,9 +4,14 @@
 import { pool } from '$lib/db';
 
 //  Reads all orders
-export const get = async ({ params }) => {
+export const get = async (event) => {
+    if (!event.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    }
     try {
-        const { delivery_date } = params;
         const res = await pool.query(`
             SELECT
                 customer_table.id AS customer_id,
@@ -39,7 +44,7 @@ export const get = async ({ params }) => {
                     ELSE    -- ...subscriptions are delivered...
                         MOD(($1::DATE - start_date), delivery_interval) = 0 -- ...when remainder is 0 days
                 END;
-        `, [delivery_date]);   
+        `, [event.params.delivery_date]);
         //  Group orders by customer
         const ordersByCustomer = res.rows.reduce((acc, obj) => {
             if (acc.find(
@@ -69,7 +74,7 @@ export const get = async ({ params }) => {
                         product_id: obj.product_id,
                         price: obj.price,
                         start_date: obj.start_date,
-                        delivery_interval: obj.delivery_interval    
+                        delivery_interval: obj.delivery_interval
                     }]
                 });
             }

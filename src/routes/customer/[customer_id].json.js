@@ -4,8 +4,8 @@
 import { pool } from '$lib/db';
 
 //  Reads data for a specific customer
-export const get = async (request) => {
-    if (!request.locals.user) {
+export const get = async (event) => {
+    if (!event.locals.user) {
         return {
             status: 401,
             body: 'Please log in!'
@@ -16,7 +16,7 @@ export const get = async (request) => {
             SELECT id AS customer_id, *
             FROM customer_table
             WHERE id = $1
-            `, [request.params.customer_id]
+            `, [event.params.customer_id]
         );
         return {
             body: res.rows[0]

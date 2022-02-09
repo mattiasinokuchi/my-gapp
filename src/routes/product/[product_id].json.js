@@ -3,15 +3,19 @@
 
 import { pool } from '$lib/db';
 
-//  Reads data for a specific customer
-export const get = async ({ params }) => {
-    try {
-        const { product_id } = params;
+//  Reads data for a specific product
+export const get = async (event) => {
+    if (!event.locals.user) {
+        return {
+            status: 401,
+            body: 'Please log in!'
+        }
+    } try {
         const res = await pool.query(`
             SELECT id AS product_id, *
             FROM product_table
             WHERE id = $1
-            `, [product_id]
+            `, [event.params.product_id]
         );
         return {
             body: res.rows[0]
