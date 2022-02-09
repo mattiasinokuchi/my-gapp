@@ -24,7 +24,7 @@
 	let formHidden = true;
 	let buttonText = "Copy telephone numbers";
 	let prefix = "";
-
+	
 	$: filteredPeople = prefix
 		? customer.filter((person) => {
 				const name = `${person.last_name}, ${person.first_name}`;
@@ -105,7 +105,7 @@
 					type="number"
 					name="delivery_order"
 					min="1"
-					max="999"
+					max={customer.length}
 					value={delivery_order}
 				/>
 				<input type="submit" value="Reorder" />
