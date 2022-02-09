@@ -43,7 +43,8 @@ export const get = async (event) => {
                         THEN $1::DATE = start_date  -- ...are delivered on start_date...
                     ELSE    -- ...subscriptions are delivered...
                         MOD(($1::DATE - start_date), delivery_interval) = 0 -- ...when remainder is 0 days
-                END;
+                END
+            ORDER BY delivery_order ASC;
         `, [event.params.delivery_date]);
         //  Group orders by customer
         const ordersByCustomer = res.rows.reduce((acc, obj) => {
