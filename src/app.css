@@ -55,7 +55,6 @@ form {
 }
 label {
     display: inline-block;
-    width: 20vw;
     text-align: right;
     color: grey;
 }
