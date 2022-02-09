@@ -54,7 +54,7 @@
 		<div hidden={formHidden}>
 			<p>
 				<label for="first_name">First Name</label>
-				<input type="text" id="first_name" name="first_name" />
+				<input type="text" id="first_name" name="first_name" required />
 			</p>
 			<p>
 				<label for="last_name">Last Name</label>
