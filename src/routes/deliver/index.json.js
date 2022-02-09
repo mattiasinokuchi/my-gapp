@@ -44,13 +44,23 @@ export const get = async (event) => {
                 -- subscription is activated
                 customer_table.active = 'true'
             AND
-                -- no time-out on selected day
-                customer_id
-                    NOT IN (
-                        SELECT customer_id
-                        FROM time_out_table
-                        WHERE ((CURRENT_DATE + index*delivery_interval) BETWEEN start_time::date AND end_time)
-                    )
+                -- no time-out on selected day...
+                CASE
+                    WHEN delivery_interval IS NULL THEN -- ...for one-time orders...
+                        customer_id
+                            NOT IN (
+                                SELECT customer_id
+                                FROM time_out_table
+                                WHERE (start_date BETWEEN start_time::date AND end_time)
+                            )
+                    ELSE -- ...or subscriptions
+                        customer_id
+                            NOT IN (
+                                SELECT customer_id
+                                FROM time_out_table
+                                WHERE ((CURRENT_DATE + index*delivery_interval) BETWEEN start_time::date AND end_time)
+                            )
+                END
             AND     
                 -- not delivered
                 order_table.id
