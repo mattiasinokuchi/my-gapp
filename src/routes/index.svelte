@@ -1,4 +1,6 @@
 <script context="module">
+    import LogRocket from "logrocket";
+    LogRocket.init("ltzjtt/my-gapp");
     export async function load({ session }) {
         if (session.user) {
             return { redirect: "/product", status: 302 };
@@ -30,8 +32,7 @@
             rel="noopener noreferrer"
         >
             web cookie
-        </a
-        > and having my email address stored privately for a while
+        </a> and having my email address stored privately for a while
     </footer>
 </main>
 
@@ -58,7 +59,7 @@
         right: 25%;
     }
     a {
-    text-decoration: underline;
-    color: black;
-}
+        text-decoration: underline;
+        color: black;
+    }
 </style>

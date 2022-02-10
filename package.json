@@ -17,6 +17,7 @@
   "type": "module",
   "dependencies": {
     "cookie": "^0.4.1",
+    "logrocket": "^2.2.0",
     "pg": "^8.7.1"
   }
 }
