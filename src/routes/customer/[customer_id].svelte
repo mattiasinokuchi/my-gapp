@@ -213,6 +213,16 @@
                 value={customer.place_of_delivery}
             />
         </p>
+        <p>
+            <label for="notes">Notes</label>
+            <input
+                type="text"
+                id="notes"
+                name="notes"
+                value={customer.notes}
+                placeholder="Allergies, recurring wishes..."
+            />
+        </p>
         <input type="submit" value="Update" />
     </form>
 

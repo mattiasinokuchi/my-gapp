@@ -84,6 +84,10 @@
 				<label for="place_of_delivery">Place of delivery</label>
 				<input type="text" id="place_of_delivery" name="place_of_delivery" />
 			</p>
+			<p>
+				<label for="notes">Notes</label>
+				<input type="text" id="notes" name="notes" placeholder="Allergies, recurring wishes..."/>
+			</p>
 			<input type="submit" value="Submit" />
 		</div>
 	</form>

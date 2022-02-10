@@ -43,11 +43,12 @@ export const post = async (event) => {
                     city,
                     telephone,
                     email,
+                    notes,
                     place_of_delivery,
                     delivery_order
                 )
             VALUES
-                ($1,$2,$3,$4,$5,$6,$7,(
+                ($1,$2,$3,$4,$5,$6,$7,$8,(
                     -- last number of customers
                     SELECT COUNT(*) + 1
                     FROM customer_table))
@@ -60,7 +61,8 @@ export const post = async (event) => {
                 data.get('city'),
                 data.get('telephone'),
                 data.get('email'),
-                data.get('place_of_delivery')
+                data.get('place_of_delivery'),
+                data.get('notes')
             ]
         );
         return {

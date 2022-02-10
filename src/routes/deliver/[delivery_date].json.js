@@ -70,6 +70,7 @@ export const get = async (event) => {
                     place_of_delivery: obj.place_of_delivery,
                     street_address: obj.street_address,
                     city: obj.city,
+                    notes: obj.notes,
                     orders: [{
                         order_id: obj.order_id,
                         product_name: obj.product_name,
