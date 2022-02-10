@@ -5,7 +5,10 @@
 		if (res.ok) {
 			const product = await res.json();
 			return {
-				props: { product },
+				props: {
+					product,
+                    currency: process.env.CURRENCY,
+				},
 			};
 		}
 		const { message } = await res.json();
@@ -16,7 +19,7 @@
 </script>
 
 <script>
-	export let product;
+	export let product, currency;
 	let subscription = false;
 	let formHidden = true;
 </script>
@@ -62,12 +65,14 @@
 				aria-label="Add product"
 			/>
 			<br />
-			<label for="price">Price ($)</label>
+			<label for="price">Price ({currency})</label>
 			<input
 				type="number"
 				id="price"
 				name="price"
 				aria-label="Add product"
+                min="0"
+                max="999"
 			/>
 			<br />
 			<button type="submit">Submit</button>

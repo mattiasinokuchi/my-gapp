@@ -5,7 +5,10 @@
         if (res.ok) {
             const product = await res.json();
             return {
-                props: { product },
+                props: {
+                    product,
+                    currency: process.env.CURRENCY,
+                },
             };
         }
         const { message } = await res.json();
@@ -16,7 +19,7 @@
 </script>
 
 <script>
-    export let product;
+    export let product, currency;
     let showDelete = false;
 </script>
 
@@ -35,12 +38,14 @@
             />
         </p>
         <p>
-            <label for="price">Price ($)</label>
+            <label for="price">Price ({currency})</label>
             <input
                 type="number"
                 id="price"
                 name="price"
                 value={product.price}
+                min="0"
+                max="999"
             />
         </p>
         <p>
@@ -63,12 +68,9 @@
         >Delete Product</button
     >
     {#if showDelete}
-        <form
-            action="/product/remove_product.json"
-            method="post"
-        >
+        <form action="/product/remove_product.json" method="post">
             <label for="button">Delete product with all orders?</label>
-            <input hidden name="product_id" value={product.product_id}>
+            <input hidden name="product_id" value={product.product_id} />
             <input id="button" type="submit" value="I know what I'm doing" />
             <button on:click={() => (showDelete = false)}>Cancel</button>
         </form>
