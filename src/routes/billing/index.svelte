@@ -8,6 +8,7 @@
 			return {
 				props: {
 					customer,
+					currency: process.env.CURRENCY,
 				},
 			};
 		} catch (error) {
@@ -17,7 +18,7 @@
 </script>
 
 <script>
-	export let customer;
+	export let customer, currency;
 
 	function allDeliveriesBilled(delivery) {
 		return delivery.every((element) => element.billing_date);
@@ -66,7 +67,7 @@
 						size="10"
 					/>
 					<span class:active={billing_date} for="product_name"
-						>{product_name} (${price})</span
+						>{product_name} ({currency}{price})</span
 					>
 					<form action="/billing/remove_delivery.json" method="post">
 						<input hidden name="delivery_id" value={delivery_id} />

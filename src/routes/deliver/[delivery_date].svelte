@@ -11,6 +11,7 @@
 					delivery,
 					delivery_date: params.delivery_date,
 					todays_delivery,
+					currency: process.env.CURRENCY,
 				},
 			};
 		} catch (error) {
@@ -20,7 +21,7 @@
 </script>
 
 <script>
-	export let delivery, delivery_date, todays_delivery;
+	export let delivery, delivery_date, todays_delivery, currency;
 	const today = new Date().toISOString().slice(0, 10);
 </script>
 
@@ -62,7 +63,8 @@
 					<form action="/deliver/deliver.json" method="post">
 						<input hidden name="customer_id" value={customer_id} />
 						<input hidden name="order_id" value={order_id} />
-						<input hidden name="price" value={price} />
+						<label for="price">Price({currency})</label>
+						<input type="number" name="price" bind:value={price} min="0" max="999"/>
 						<input hidden name="delivery_date" value={delivery_date} />
 						<input
 							hidden
