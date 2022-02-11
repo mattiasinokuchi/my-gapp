@@ -6,12 +6,17 @@
 			const delivery = await res.json();
 			res = await fetch(`/deliver/get_todays_deliveries.json`);
 			const todays_delivery = await res.json();
+			res = await fetch(
+				`/deliver/get_counts/${params.delivery_date}.json`
+			);
+			const count = await res.json();
 			return {
 				props: {
 					delivery,
 					delivery_date: params.delivery_date,
 					todays_delivery,
 					currency: process.env.CURRENCY,
+					count,
 				},
 			};
 		} catch (error) {
@@ -21,7 +26,7 @@
 </script>
 
 <script>
-	export let delivery, delivery_date, todays_delivery, currency;
+	export let delivery, delivery_date, todays_delivery, currency, count;
 	const today = new Date().toISOString().slice(0, 10);
 </script>
 
@@ -30,21 +35,25 @@
 	<div id="screen">
 		<div class="whitebox">
 			<h1>{delivery_date}</h1>
-			<button on:click={() => window.print()}>Print Out</button>
-			<!-- This is a undo buttton -->
-			<form action="/deliver/undo.json" method="post">
-				<input
-					hidden
-					name="delivery_date"
-					value={delivery_date}
-				/>
-				<input
-					type="submit"
-					value="Undo last delivery"
-					hidden={delivery_date !== today}
-					disabled={todays_delivery.length < 1}
-				/>
-			</form>
+			<!-- This is a list of products and counts-->
+			{#each count as { product_name, count }}
+				<ul>
+					<li>{count} x {product_name}</li>
+				</ul>
+			{/each}
+			<div class="buttons">
+				<button on:click={() => window.print()}>Print Out</button>
+				<!-- This is a undo buttton -->
+				<form action="/deliver/undo.json" method="post">
+					<input hidden name="delivery_date" value={delivery_date} />
+					<input
+						type="submit"
+						value="Undo last delivery"
+						hidden={delivery_date !== today}
+						disabled={todays_delivery.length < 1}
+					/>
+				</form>
+			</div>
 		</div>
 
 		<h2 hidden={delivery.length > 0}>No more delivery to do. Relax!</h2>
@@ -56,14 +65,20 @@
 					{first_name}
 					{last_name}:
 				</h2>
-				<p hidden={!place_of_delivery}>Place of delivery: {place_of_delivery}</p>
+				<p hidden={!place_of_delivery}>
+					Place of delivery: {place_of_delivery}
+				</p>
 				<p hidden={place_of_delivery}>{street_address}, {city}</p>
 				<p hidden={!notes}>Notes: {notes}</p>
 				{#each orders as { order_id, product_name, product_id, price }}
 					<form action="/deliver/deliver.json" method="post">
 						<input hidden name="customer_id" value={customer_id} />
 						<input hidden name="order_id" value={order_id} />
-						<input hidden name="delivery_date" value={delivery_date} />
+						<input
+							hidden
+							name="delivery_date"
+							value={delivery_date}
+						/>
 						<input hidden name="product_id" value={product_id} />
 						<label for="product_name">{product_name}, </label>
 						<input
@@ -73,8 +88,14 @@
 							value={product_name}
 						/>
 						<label for="price">({currency})</label>
-						<input type="number" name="price" bind:value={price} min="0" max="999"/>
-						<br>
+						<input
+							type="number"
+							name="price"
+							bind:value={price}
+							min="0"
+							max="999"
+						/>
+						<br />
 						<input
 							type="submit"
 							value="Deliver"
@@ -87,14 +108,27 @@
 	</div>
 	<!-- This is for printers -->
 	<div id="print">
+		<!-- This is a list of products and counts-->
+		<p>To deliver:</p>
+		{#each count as { product_name, count }}
+			<ul>
+				<li>{count} x {product_name}</li>
+			</ul>
+		{/each}
+		<hr>
 		<!-- This is a list of customers and products to deliver-->
 		{#each delivery as { first_name, last_name, place_of_delivery, street_address, city, notes, orders }}
 			<div id="customer">
 				<p>
-					{first_name} {last_name},
-					<span hidden={!place_of_delivery}>Place of delivery: {place_of_delivery}</span>
-					<span hidden={place_of_delivery}>{street_address}, {city}</span> 
-					<span hidden={!notes}>Note: {notes}</span> 
+					{first_name}
+					{last_name},
+					<span hidden={!place_of_delivery}
+						>Place of delivery: {place_of_delivery}</span
+					>
+					<span hidden={place_of_delivery}
+						>{street_address}, {city}</span
+					>
+					<span hidden={!notes}>Note: {notes}</span>
 				</p>
 				<ul>
 					{#each orders as { product_name }}
@@ -117,6 +151,11 @@
 	}
 	input[type="number"] {
 		margin-left: 0;
+	}
+	.buttons {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 	/* Hides the navbar for printers*/
 	@media print {
