@@ -63,18 +63,21 @@
 					<form action="/deliver/deliver.json" method="post">
 						<input hidden name="customer_id" value={customer_id} />
 						<input hidden name="order_id" value={order_id} />
-						<label for="price">Price({currency})</label>
-						<input type="number" name="price" bind:value={price} min="0" max="999"/>
 						<input hidden name="delivery_date" value={delivery_date} />
+						<input hidden name="product_id" value={product_id} />
+						<label for="product_name">{product_name}, </label>
 						<input
 							hidden
+							type="text"
 							name="product_name"
 							value={product_name}
 						/>
-						<input hidden name="product_id" value={product_id} />
+						<label for="price">({currency})</label>
+						<input type="number" name="price" bind:value={price} min="0" max="999"/>
+						<br>
 						<input
 							type="submit"
-							value={product_name}
+							value="Deliver"
 							disabled={delivery_date !== today}
 						/>
 					</form>
@@ -111,6 +114,9 @@
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: center;
+	}
+	input[type="number"] {
+		margin-left: 0;
 	}
 	/* Hides the navbar for printers*/
 	@media print {
