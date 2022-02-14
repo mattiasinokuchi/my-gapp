@@ -98,7 +98,8 @@
 					</form>
 				</div>
 			{/each}
-			Total ({currency}): {to_pay}
+			<hr>
+			Sum to bill ({currency}): {to_pay}
 			<!-- This is a form to set multiple deliveries as billed -->
 			<form action="/billing/bill.json" method="post">
 				<input hidden name="customer_id" value={customer_id} />
