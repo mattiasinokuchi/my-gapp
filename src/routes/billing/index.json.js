@@ -35,6 +35,7 @@ export const get = async (request) => {
                 const index = acc.findIndex(
                     accObject => accObject.customer_id === obj.customer_id
                 );
+                acc[index].to_pay = acc[index].to_pay + obj.price;
                 acc[index].delivery.push({
                     delivery_id: obj.delivery_id,
                     delivery_date: obj.delivery_date,
@@ -47,6 +48,7 @@ export const get = async (request) => {
                     customer_id: obj.customer_id,
                     first_name: obj.first_name,
                     last_name: obj.last_name,
+                    to_pay: obj.price,
                     delivery: [{
                         delivery_id: obj.delivery_id,
                         delivery_date: obj.delivery_date,

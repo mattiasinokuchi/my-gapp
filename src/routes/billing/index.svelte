@@ -43,7 +43,7 @@
 	<h2 hidden={customer.length > 0}>No billing to do. Relax!</h2>
 
 	<!-- This is a list of customers to bill -->
-	{#each filteredCustomer as { first_name, last_name, delivery, customer_id }}
+	{#each filteredCustomer as { first_name, last_name, delivery, customer_id, to_pay }}
 		<div class="box">
 			<h2>
 				{first_name}
@@ -107,6 +107,7 @@
 					</form>
 				</div>
 			{/each}
+			Total ({currency}): {to_pay}
 			<!-- This is a form to set multiple deliveries as billed -->
 			<form action="/billing/set_date.json" method="post">
 				<input hidden name="customer_id" value={customer_id} />
