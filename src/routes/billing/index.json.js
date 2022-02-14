@@ -28,6 +28,7 @@ export const get = async (request) => {
             ON customer_table.id = delivery_table.customer_id;
         `);
         //  ...then group deliveries by customer
+        let to_pay;
         const deliveriesByCustomer = res.rows.reduce((acc, obj) => {
             if (acc.find(
                 accObject => accObject.customer_id === obj.customer_id
@@ -35,7 +36,9 @@ export const get = async (request) => {
                 const index = acc.findIndex(
                     accObject => accObject.customer_id === obj.customer_id
                 );
-                acc[index].to_pay = acc[index].to_pay + obj.price;
+                if (!obj.bill_date) {
+                    acc[index].to_pay = acc[index].to_pay + obj.price;
+                }
                 acc[index].delivery.push({
                     delivery_id: obj.delivery_id,
                     delivery_date: obj.delivery_date,
@@ -44,11 +47,16 @@ export const get = async (request) => {
                     billing_date: obj.bill_date
                 });
             } else {
+                if (!obj.bill_date) {
+                    to_pay = obj.price;
+                } else {
+                    to_pay = 0
+                }
                 acc.push({
                     customer_id: obj.customer_id,
                     first_name: obj.first_name,
                     last_name: obj.last_name,
-                    to_pay: obj.price,
+                    to_pay: to_pay,
                     delivery: [{
                         delivery_id: obj.delivery_id,
                         delivery_date: obj.delivery_date,
