@@ -50,9 +50,8 @@
 				{last_name}:
 			</h2>
 			{#each delivery as { delivery_id, delivery_date, product_name, price, billing_date }}
-				<!-- This is a form for updating delivery and billing dates -->
+				<!-- This is a list of deliveries with billing dates -->
 				<div id="unbilled">
-					<!-- This is a form to undo a delivery -->
 					<span
 						hidden={!billing_date}
 						class:active={billing_date}
@@ -69,14 +68,6 @@
 					<span class:active={billing_date} for="product_name"
 						>{product_name} ({currency}{price})</span
 					>
-					<form action="/billing/remove_delivery.json" method="post">
-						<input hidden name="delivery_id" value={delivery_id} />
-						<input
-							hidden={billing_date}
-							type="submit"
-							value="Undeliver"
-						/>
-					</form>
 				</div>
 				<div id="billed">
 					<span hidden={!billing_date} for="billing_date"
@@ -91,7 +82,7 @@
 						size="10"
 					/>
 					<!-- This is a form to undo a billing -->
-					<form action="/billing/update.json" method="post">
+					<form action="/billing/undo.json" method="post">
 						<input hidden name="delivery_id" value={delivery_id} />
 						<input
 							hidden
@@ -109,7 +100,7 @@
 			{/each}
 			Total ({currency}): {to_pay}
 			<!-- This is a form to set multiple deliveries as billed -->
-			<form action="/billing/set_date.json" method="post">
+			<form action="/billing/bill.json" method="post">
 				<input hidden name="customer_id" value={customer_id} />
 				<input
 					type="submit"
