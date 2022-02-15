@@ -20,8 +20,6 @@ export const get = async (event) => {
             INNER JOIN customer_table ON customer_table.id = order_table.customer_id
             INNER JOIN product_table ON product_table.id = order_table.product_id
             WHERE
-                customer_table.active = 'true'
-            AND
                 -- no time-out this day
                 customer_id
                 NOT IN (
@@ -40,9 +38,10 @@ export const get = async (event) => {
             AND -- it is a delivery day...
                 CASE
                     WHEN delivery_interval IS NULL  -- one-time orders...
-                        THEN $1::DATE = start_date  -- ...are delivered on start_date...
-                    ELSE    -- ...subscriptions are delivered...
-                        MOD(($1::DATE - start_date), delivery_interval) = 0 -- ...when remainder is 0 days
+                        THEN $1::DATE = start_date  -- ...are delivered on start_date
+                    ELSE    -- subscriptions are delivered...
+                        MOD(($1::DATE - start_date), delivery_interval) = 0 -- ...when remainder is 0 days...
+                        AND $1::DATE >= start_date  -- ...and subscription has started
                 END
             ORDER BY delivery_order ASC;
         `, [event.params.delivery_date]);

@@ -41,9 +41,6 @@ export const get = async (event) => {
             CROSS JOIN
                 generate_series(0,89) AS index
             WHERE
-                -- subscription is activated
-                customer_table.active = 'true'
-            AND
                 -- no time-out on selected day...
                 CASE
                     WHEN delivery_interval IS NULL THEN -- ...for one-time orders...
@@ -61,6 +58,9 @@ export const get = async (event) => {
                                 WHERE ((CURRENT_DATE + index*delivery_interval) BETWEEN start_time::date AND end_time)
                             )
                 END
+            AND
+                -- subscription has started
+                (CURRENT_DATE + index*delivery_interval) >= order_table.start_date 
             AND     
                 -- not delivered
                 order_table.id
