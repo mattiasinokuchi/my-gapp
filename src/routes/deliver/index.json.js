@@ -58,9 +58,9 @@ export const get = async (event) => {
                                 WHERE ((CURRENT_DATE + index*delivery_interval) BETWEEN start_time::date AND end_time)
                             )
                 END
-            AND
+--            AND
                 -- subscription has started
-                (CURRENT_DATE + index*delivery_interval) >= order_table.start_date 
+--                (CURRENT_DATE + index*delivery_interval) >= order_table.start_date 
             AND     
                 -- not delivered
                 order_table.id
