@@ -10,6 +10,10 @@
 				`/deliver/get_counts/${params.delivery_date}.json`
 			);
 			const count = await res.json();
+			res = await fetch(
+				`/deliver/get_phone_numbers/${params.delivery_date}.json`
+			);
+			const phone = await res.json();
 			return {
 				props: {
 					delivery,
@@ -17,6 +21,7 @@
 					todays_delivery,
 					currency: process.env.CURRENCY,
 					count,
+					phone,
 				},
 			};
 		} catch (error) {
@@ -26,8 +31,13 @@
 </script>
 
 <script>
-	export let delivery, delivery_date, todays_delivery, currency, count;
+	export let delivery, delivery_date, todays_delivery, currency, count, phone;
 	const today = new Date().toISOString().slice(0, 10);
+	let buttonText = "Copy telephone numbers";
+	function copy() {
+		navigator.clipboard.writeText(phone[0].numbers);
+		buttonText = "Phone numbers copied";
+	}
 </script>
 
 <main>
@@ -42,6 +52,9 @@
 				</ul>
 			{/each}
 			<div class="buttons">
+				<!-- This is a button for copying customers phone numbers -->
+				<button on:click={copy}>{buttonText}</button>
+				<!-- This is a button for printing out a list -->
 				<button on:click={() => window.print()}>Print Out</button>
 				<!-- This is a undo buttton -->
 				<form action="/deliver/undo.json" method="post">
@@ -115,7 +128,7 @@
 				<li>{count} x {product_name}</li>
 			</ul>
 		{/each}
-		<hr>
+		<hr />
 		<!-- This is a list of customers and products to deliver-->
 		{#each delivery as { first_name, last_name, place_of_delivery, street_address, city, notes, orders }}
 			<div id="customer">
