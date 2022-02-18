@@ -41,28 +41,40 @@ export const get = async (event) => {
             CROSS JOIN
                 generate_series(0,89) AS index
             WHERE
-                -- no time-out on selected day...
-                CASE
-                    WHEN delivery_interval IS NULL THEN -- ...for one-time orders...
-                        customer_id
-                            NOT IN (
-                                SELECT customer_id
-                                FROM time_out_table
-                                WHERE (start_date BETWEEN start_time::date AND end_time)
-                            )
-                    ELSE -- ...or subscriptions
-                        customer_id
-                            NOT IN (
-                                SELECT customer_id
-                                FROM time_out_table
-                                WHERE ((CURRENT_DATE + index*delivery_interval) BETWEEN start_time::date AND end_time)
-                            )
-                END
---            AND
+
                 -- subscription has started
---                (CURRENT_DATE + index*delivery_interval) >= order_table.start_date 
-            AND     
-                -- not delivered
+                CASE WHEN delivery_interval IS NULL   -- prevent one-time orders from being left out
+                THEN
+                    customer_id IN (
+                        SELECT customer_id
+                        FROM order_table
+                    )
+                ELSE
+                    CURRENT_DATE + index*delivery_interval - MOD(CURRENT_DATE - start_date, delivery_interval)  -- delivery date (see above)
+                    >= start_date
+
+                    END
+
+                AND -- no time-out on delivery day...
+                    CASE WHEN delivery_interval IS NULL   --  ...for one-time orders...
+                    THEN
+                        customer_id NOT IN (
+                            SELECT customer_id
+                            FROM time_out_table
+                            WHERE
+                                order_table.start_date BETWEEN time_out_table.start_time AND time_out_table.end_time
+                        )
+                    ELSE -- ...or subscriptions
+                        customer_id NOT IN (
+                            SELECT customer_id
+                            FROM time_out_table
+                            WHERE
+                                CURRENT_DATE + index*delivery_interval - MOD(CURRENT_DATE - start_date, delivery_interval)  -- delivery date (see above)
+                                BETWEEN time_out_table.start_time AND time_out_table.end_time            
+                        )
+                    END
+
+                AND -- not delivered
                 order_table.id
                     NOT IN (
                         SELECT order_id
@@ -113,6 +125,7 @@ export const get = async (event) => {
 
         return {
             body: deliveriesGroupedByDate
+//            body: res.rows
         }
     } catch (error) {
         console.log(error);
