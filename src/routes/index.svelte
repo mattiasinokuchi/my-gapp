@@ -1,6 +1,4 @@
 <script context="module">
-    import LogRocket from "logrocket";
-    LogRocket.init("ltzjtt/my-gapp");
     export async function load({ session }) {
         if (session.user) {
             return { redirect: "/product", status: 302 };
