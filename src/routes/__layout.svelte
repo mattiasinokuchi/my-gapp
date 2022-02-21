@@ -42,7 +42,7 @@
 	>
 </nav>
 
-<div hidden={!demoMode}>THIS IS A DEMO - ANYONE CAN SEE AND EDIT THIS</div>
+<div hidden={!demoMode}>This is a demo. Anyone can see and edit this content.</div>
 
 <main>
 	<slot />
