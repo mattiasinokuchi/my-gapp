@@ -25,7 +25,8 @@ export const get = async (request) => {
                 *
             FROM delivery_table
             INNER JOIN customer_table
-            ON customer_table.id = delivery_table.customer_id;
+            ON customer_table.id = delivery_table.customer_id
+            ORDER BY customer_table.last_name;
         `);
         //  ...then group deliveries by customer
         let to_pay;
