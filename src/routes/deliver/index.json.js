@@ -40,23 +40,22 @@ export const get = async (event) => {
                 customer_table.id = order_table.customer_id
             CROSS JOIN
                 generate_series(0,89) AS index
-            WHERE
-
-                -- subscription has started
-                CASE WHEN delivery_interval IS NULL   -- prevent one-time orders from being left out
-                THEN
-                    customer_id IN (
-                        SELECT customer_id
-                        FROM order_table
-                    )
-                ELSE
-                    CURRENT_DATE + index*delivery_interval - MOD(CURRENT_DATE - start_date, delivery_interval)  -- delivery date (see above)
-                    >= start_date
-
-                    END
-
-                AND -- no time-out on delivery day...
-                    CASE WHEN delivery_interval IS NULL   --  ...for one-time orders...
+            WHERE   -- date is due
+                CASE WHEN delivery_interval IS NULL   -- one-time orders
+                    THEN
+                        customer_id IN (
+                            SELECT customer_id
+                            FROM order_table
+                        )
+                    ELSE    -- subscriptions
+                        CURRENT_DATE + index*delivery_interval - MOD(CURRENT_DATE - start_date, delivery_interval)  -- delivery date (see above)
+                        >= start_date
+                        AND
+                        CURRENT_DATE + index*delivery_interval - MOD(CURRENT_DATE - start_date, delivery_interval)  -- delivery date (see above)
+                        >= CURRENT_DATE
+                END
+            AND -- no time-out on delivery day...
+                CASE WHEN delivery_interval IS NULL   --  ...for one-time orders...
                     THEN
                         customer_id NOT IN (
                             SELECT customer_id
@@ -72,9 +71,8 @@ export const get = async (event) => {
                                 CURRENT_DATE + index*delivery_interval - MOD(CURRENT_DATE - start_date, delivery_interval)  -- delivery date (see above)
                                 BETWEEN time_out_table.start_time AND time_out_table.end_time            
                         )
-                    END
-
-                AND -- not delivered
+                END
+            AND -- not delivered
                 order_table.id
                     NOT IN (
                         SELECT order_id
