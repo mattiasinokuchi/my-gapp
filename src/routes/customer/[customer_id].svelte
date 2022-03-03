@@ -192,7 +192,7 @@
         <p>
             <label for="telephone">Telephone</label>
             <input
-                type="tel"
+                type="number"
                 id="telephone"
                 name="telephone"
                 value={customer.telephone}

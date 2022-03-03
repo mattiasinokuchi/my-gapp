@@ -74,7 +74,7 @@
 			</p>
 			<p>
 				<label for="telephone">Telephone</label>
-				<input type="tel" id="telephone" name="telephone" />
+				<input type="number" id="telephone" name="telephone" />
 			</p>
 			<p>
 				<label for="email">Email</label>
