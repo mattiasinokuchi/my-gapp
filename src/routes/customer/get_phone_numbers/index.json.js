@@ -27,8 +27,9 @@ export const get = async (request) => {
         `);
     let str = '';
     for (let index = 0; index < res.rows.length; index++) {
-        str += res.rows[index].telephone + ' ';
+        str += res.rows[index].telephone + ', ';
     }
+    str = str.slice(0, -2);
     return {
         body: [{ numbers: str }]
     };
