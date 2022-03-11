@@ -94,7 +94,7 @@
 
 	<!-- This is a field for filtering customers	-->
 	<div class="whitebox">
-		<input bind:value={prefix} placeholder="filter by surname" />
+		<input bind:value={prefix} placeholder="filter by last name" />
 	</div>
 
 	<h3 hidden={customer.length > 0}>No customers. Add someone!</h3>

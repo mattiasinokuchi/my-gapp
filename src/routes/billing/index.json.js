@@ -26,7 +26,9 @@ export const get = async (request) => {
             FROM delivery_table
             INNER JOIN customer_table
             ON customer_table.id = delivery_table.customer_id
-            ORDER BY customer_table.delivery_order;
+            ORDER BY
+                customer_table.delivery_order,
+                delivery_table.delivery_time;
         `);
         //  ...then group deliveries by customer
         let to_pay;
@@ -45,7 +47,8 @@ export const get = async (request) => {
                     delivery_date: obj.delivery_date,
                     product_name: obj.product_name,
                     price: obj.price,
-                    billing_date: obj.bill_date
+                    billing_date: obj.bill_date,
+                    delivery_comment: obj.delivery_comment
                 });
             } else {
                 if (!obj.bill_date) {
@@ -63,7 +66,8 @@ export const get = async (request) => {
                         delivery_date: obj.delivery_date,
                         product_name: obj.product_name,
                         price: obj.price,
-                        billing_date: obj.bill_date
+                        billing_date: obj.bill_date,
+                        delivery_comment: obj.delivery_comment
                     }]
                 });
             }

@@ -20,12 +20,16 @@ export const post = async (event) => {
                 delivery_table
             SET
                 delivery_time = $1,
-                billing_date = NULLIF ($2::text, '')::date
+                price = $2,
+                delivery_comment = $3,
+                billing_date = NULLIF ($4::text, '')::date
             WHERE
-                id = $3;
+                id = $5;
             `,
             [
                 data.get('delivery_date'),
+                data.get('price'),
+                data.get('delivery_comment'),
                 data.get('billing_date'),
                 data.get('delivery_id')
             ]

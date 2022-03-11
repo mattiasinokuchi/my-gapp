@@ -20,6 +20,8 @@
 <script>
 	export let customer, currency;
 
+	let edit_id = null;
+
 	function allDeliveriesBilled(delivery) {
 		return delivery.every((element) => element.billing_date);
 	}
@@ -39,7 +41,7 @@
 	<div id="screen">
 		<!-- This is a field for finding customers	-->
 		<div class="whitebox">
-			<input bind:value={prefix} placeholder="filter by surname" />
+			<input bind:value={prefix} placeholder="filter by last name" />
 			<!-- This is a button for printing out a list -->
 			<button on:click={() => window.print()}>Print Out</button>
 		</div>
@@ -53,68 +55,112 @@
 					{first_name}
 					{last_name}:
 				</h2>
-				{#each delivery as { delivery_id, delivery_date, product_name, price, billing_date }}
-					<!-- This is a list of deliveries with billing dates -->
-					<div id="unbilled">
-						<span
-							hidden={!billing_date}
-							class:active={billing_date}
-							for="delivery_date"
-							>{delivery_date}:
-						</span>
-						<input
-							hidden={billing_date}
-							type="text"
-							name="delivery_date"
-							value={delivery_date}
-							size="10"
-						/>
-						<span class:active={billing_date} for="product_name"
-							>{product_name} ({currency}{price})</span
-						>
-					</div>
-					<div id="billed">
-						<span hidden={!billing_date} for="billing_date"
-							>billed
-						</span>
-						<input
-							class="billing_date"
-							hidden={!billing_date}
-							type="text"
-							name="billing_date"
-							value={billing_date}
-							size="10"
-						/>
-						<!-- This is a form to undo a billing -->
-						<form action="/billing/undo.json" method="post">
-							<input
-								hidden
-								name="delivery_id"
-								value={delivery_id}
-							/>
-							<input
-								hidden
-								name="delivery_date"
-								value={delivery_date}
-							/>
-							<input hidden name="billing_date" value="" />
-							<input
-								hidden={!billing_date}
-								type="submit"
-								value="Undo"
-							/>
-						</form>
-					</div>
-				{/each}
+				<!-- This is a list of deliveries -->
+				<ul>
+					{#each delivery as { delivery_id, delivery_date, product_name, price, billing_date, delivery_comment }}
+						<!-- This is a form for updating a delivery -->
+						{#if edit_id === delivery_id}
+							<li>
+								<form
+									action="/billing/update.json"
+									method="post"
+								>
+									<fieldset>
+										<input
+											hidden
+											name="delivery_id"
+											value={delivery_id}
+										/>
+										<p>
+											<label for="product_name"
+												>Product</label
+											>
+											<input
+												type="text"
+												name="product_name"
+												value={product_name}
+												disabled
+											/>
+										</p>
+										<p>
+											<label for="delivery_date"
+												>Delivery date
+											</label>
+											<input
+												type="date"
+												name="delivery_date"
+												value={delivery_date}
+												required
+											/>
+										</p>
+										<p>
+											<label for="price"
+												>Price ({currency})
+											</label>
+											<input
+												type="number"
+												name="price"
+												value={price}
+												min="0"
+												max="999"
+											/>
+										</p>
+										<p>
+											<label for="delivery_comment"
+												>Comment
+											</label>
+											<input
+												type="text"
+												name="delivery_comment"
+												value={delivery_comment}
+												size="20"
+											/>
+										</p>
+										<p>
+											<label for="billing_date"
+												>Billing date
+											</label>
+											<input
+												type="date"
+												name="billing_date"
+												value={billing_date}
+											/>
+										</p>
+										<input
+											type="button"
+											value="Cancel"
+											on:click={() => (edit_id = null)}
+										/>
+										<input type="submit" value="Update" />
+									</fieldset>
+								</form>
+							</li>
+						{:else}
+							<div>
+								<span class:active={billing_date}>
+									{delivery_date}, {product_name}, {currency}
+									{price}
+								</span>
+								<button
+									on:click={() => (edit_id = delivery_id)}
+									hidden={edit_id === delivery_id}
+									disabled={edit_id}
+									>Edit
+								</button>
+							</div>
+						{/if}
+					{/each}
+				</ul>
 				<hr />
 				Sum to bill ({currency}): {to_pay}
 				<!-- This is a form to set multiple deliveries as billed -->
-				<form action="/billing/bill.json" method="post">
+				<form action="/billing/bill_all.json" method="post">
 					<input hidden name="customer_id" value={customer_id} />
 					<input
 						type="submit"
 						value="Billed them all!"
 						hidden={(() => allDeliveriesBilled(delivery))()}
+						disabled={edit_id}
 					/>
 				</form>
 			</div>
@@ -179,22 +225,14 @@
 		flex-wrap: wrap;
 		justify-content: center;
 	}
-	#unbilled,
-	#billed {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
 	span.active {
 		text-decoration: line-through;
 		color: gray;
 	}
-	span {
-		color: black;
-	}
-	input[type="text"] {
-		background-color: lemonchiffon;
-		border: none;
+	fieldset {
+		border-radius: 5vw;
+		border-color: salmon;
+		border-width: 1px;
 	}
 	/* Hides the navbar for printers*/
 	@media print {
@@ -208,12 +246,12 @@
 			top: 0;
 			background-color: white;
 		}
+		#screen {
+			display: none;
+		}
 		ul {
 			list-style-type: circle;
 			padding-left: 5vw;
-		}
-		#screen {
-			display: none;
 		}
 		#customer {
 			break-inside: avoid;
