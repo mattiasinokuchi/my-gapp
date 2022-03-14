@@ -21,32 +21,51 @@
 	export let customer, currency;
 
 	let edit_id = null;
+	let showBilled = false;
 
 	function allDeliveriesBilled(delivery) {
 		return delivery.every((element) => element.billing_date);
 	}
 
 	//	This a block of code for filtering customers
-	let prefix = "";
-	$: filteredCustomer = prefix
+	let lettersInFilter = "";
+	$: deliveredCustomers = !showBilled //	apply filter below if showBilled is not checked
 		? customer.filter((person) => {
-				const name = `${person.last_name}, ${person.first_name}`;
-				return name.toLowerCase().startsWith(prefix.toLowerCase());
+				return person.to_pay > 0;
 		  })
-		: customer;
+		: customer; //	don't apply filter if showBilled is checked
+	$: filteredCustomer = lettersInFilter //	apply filter below if there is any lettersInFilter
+		? deliveredCustomers.filter((person) => {
+				return person.last_name
+					.toLowerCase()
+					.startsWith(lettersInFilter.toLowerCase());
+		  })
+		: deliveredCustomers; //	don't apply filter below if there is no lettersInFilter
 </script>
 
 <main>
 	<!-- This is for screens -->
 	<div id="screen">
-		<!-- This is a field for finding customers	-->
 		<div class="whitebox">
-			<input bind:value={prefix} placeholder="filter by last name" />
+			<!-- This is a checkbox for showing billed deliveries	-->
+			<label for="showBilled">Show billed</label>
+			<input
+				type="checkbox"
+				name="showBilled"
+				bind:checked={showBilled}
+			/>
+			<!-- This is a field for filtering customers	-->
+			<input
+				type="text"
+				bind:value={lettersInFilter}
+				placeholder="filter by last name"
+				size="11"
+			/>
 			<!-- This is a button for printing out a list -->
 			<button on:click={() => window.print()}>Print Out</button>
 		</div>
 
-		<h2 hidden={customer.length > 0}>No billing to do. Relax!</h2>
+		<h2 hidden={filteredCustomer.length > 0}>No billing to do. Relax!</h2>
 
 		<!-- This is a list of customers to bill -->
 		{#each filteredCustomer as { first_name, last_name, delivery, customer_id, to_pay }}
@@ -137,13 +156,17 @@
 							</li>
 						{:else}
 							<div>
-								<span class:active={billing_date}>
+								<span
+									hidden={!showBilled && billing_date}
+									class:active={billing_date}
+								>
 									{delivery_date}, {product_name}, {currency}
 									{price}
 								</span>
 								<button
 									on:click={() => (edit_id = delivery_id)}
-									hidden={edit_id === delivery_id}
+									hidden={edit_id === delivery_id ||
+										(!showBilled && billing_date)}
 									disabled={edit_id}
 									>Edit
 								</button>
@@ -169,7 +192,7 @@
 	<!-- This is for printers -->
 	<div id="print">
 		<!-- This is a list of customers to bill -->
-		{#each customer as { first_name, last_name, delivery, to_pay }}
+		{#each filteredCustomer as { first_name, last_name, delivery, to_pay }}
 			<div id="customer">
 				<p>
 					{first_name}
@@ -178,34 +201,19 @@
 				<ul>
 					{#each delivery as { delivery_date, product_name, price, billing_date }}
 						<!-- This is a list of deliveries with billing dates -->
-						<li>
+						<li hidden={!showBilled && billing_date}>
 							<span
-								hidden={!billing_date}
 								class:active={billing_date}
 								for="delivery_date"
 								>{delivery_date}:
 							</span>
-							<input
-								hidden={billing_date}
-								type="text"
-								name="delivery_date"
-								value={delivery_date}
-								size="10"
-							/>
 							<span class:active={billing_date} for="product_name"
 								>{product_name} ({currency}{price})</span
 							>
 							<span hidden={!billing_date} for="billing_date"
 								>billed
 							</span>
-							<input
-								class="billing_date"
-								hidden={!billing_date}
-								type="text"
-								name="billing_date"
-								value={billing_date}
-								size="10"
-							/>
+							<span hidden={!billing_date}>{billing_date} </span>
 						</li>
 					{/each}
 				</ul>
