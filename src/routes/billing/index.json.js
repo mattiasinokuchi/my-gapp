@@ -11,7 +11,7 @@ export const get = async (request) => {
         }
     }
     try {
-        // Remove old and billed deliveries
+        // Remove old billings
         await pool.query(`
             DELETE FROM delivery_table
             WHERE billing_date :: DATE < (CURRENT_DATE-90);
@@ -26,7 +26,9 @@ export const get = async (request) => {
             FROM delivery_table
             INNER JOIN customer_table
             ON customer_table.id = delivery_table.customer_id
-            ORDER BY customer_table.last_name;
+            ORDER BY
+                customer_table.delivery_order,
+                delivery_table.delivery_time;
         `);
         //  ...then group deliveries by customer
         let to_pay;
@@ -45,7 +47,8 @@ export const get = async (request) => {
                     delivery_date: obj.delivery_date,
                     product_name: obj.product_name,
                     price: obj.price,
-                    billing_date: obj.bill_date
+                    billing_date: obj.bill_date,
+                    delivery_comment: obj.delivery_comment
                 });
             } else {
                 if (!obj.bill_date) {
@@ -63,7 +66,8 @@ export const get = async (request) => {
                         delivery_date: obj.delivery_date,
                         product_name: obj.product_name,
                         price: obj.price,
-                        billing_date: obj.bill_date
+                        billing_date: obj.bill_date,
+                        delivery_comment: obj.delivery_comment
                     }]
                 });
             }
@@ -77,8 +81,8 @@ export const get = async (request) => {
     }
 }
 
-//  Delete deliveries
-export const post = async (event) => {
+//  Delete deliveries (not in use)
+/*export const post = async (event) => {
     if (!event.locals.user) {
         return {
             status: 401,
@@ -102,4 +106,4 @@ export const post = async (event) => {
     } catch (error) {
         console.log(error)
     }
-};
+}; */

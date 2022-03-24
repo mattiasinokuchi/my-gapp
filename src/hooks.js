@@ -25,7 +25,7 @@ export const handle = async ({ event, resolve }) => {
                 httpOnly: true,
 //                sameSite: 'strict',	redirection after login not working when enabled
                 secure: process.env.NODE_ENV === 'production',
-//                maxAge: 604800
+                maxAge: 43200
 			})
 		);
 		response.headers.append(
@@ -35,7 +35,7 @@ export const handle = async ({ event, resolve }) => {
                 httpOnly: true,
 //                sameSite: 'strict',	redirection after login not working when enabled
                 secure: process.env.NODE_ENV === 'production',
-//                maxAge: 604800
+                maxAge: 43200
 			})
 		);
 	}

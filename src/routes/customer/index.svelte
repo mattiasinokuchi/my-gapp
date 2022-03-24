@@ -23,12 +23,12 @@
 	export let customer, phone;
 	let formHidden = true;
 	let buttonText = "Copy telephone numbers";
-	let prefix = "";
+	let lettersInFilter = "";
 	
-	$: filteredPeople = prefix
+	$: filteredPeople = lettersInFilter
 		? customer.filter((person) => {
 				const name = `${person.last_name}, ${person.first_name}`;
-				return name.toLowerCase().startsWith(prefix.toLowerCase());
+				return name.toLowerCase().startsWith(lettersInFilter.toLowerCase());
 		  })
 		: customer;
 
@@ -94,7 +94,7 @@
 
 	<!-- This is a field for filtering customers	-->
 	<div class="whitebox">
-		<input bind:value={prefix} placeholder="filter by surname" />
+		<input bind:value={lettersInFilter} placeholder="filter by last name" />
 	</div>
 
 	<h3 hidden={customer.length > 0}>No customers. Add someone!</h3>

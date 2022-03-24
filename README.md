@@ -51,16 +51,18 @@ INSERT INTO customer_table(
 	city,
 	telephone,
 	email,
- 	delivery_order)
+ 	delivery_order,
+	place_of_delivery)
 VALUES(
 	'Dynamit',
 	'Harry',
 	'Vilkenjädragatan 0',
 	'6...5...4...',
-	'Hadirajastad',
-	'3...2...1...',
+	'Hadiraja',
+	'3210',
 	'eld.i@berg.et',
-	'1');
+	'1',
+	'lite högre upp');
 
 DROP TABLE IF EXISTS time_out_table;
 
@@ -77,8 +79,8 @@ INSERT INTO time_out_table(
 	end_time)
 VALUES(
 	'1',
-	'2021-12-01',
-	'2022-01-01');
+	CURRENT_DATE + 7,
+	CURRENT_DATE + 14);
 
 DROP TABLE IF EXISTS order_table;
 
@@ -107,7 +109,8 @@ CREATE TABLE delivery_table (
 	product_id TEXT NOT NULL,
 	price INT NOT NULL,
 	order_id INT NOT NULL,
-	billing_date DATE
+	billing_date DATE,
+	delivery_comment TEXT
 );
 
 INSERT INTO delivery_table(

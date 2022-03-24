@@ -53,11 +53,6 @@ a {
 form {
     text-align: center;
 }
-label {
-    display: inline-block;
-    text-align: right;
-    color: grey;
-}
 ul {
     list-style: none;
     padding-left: 0;

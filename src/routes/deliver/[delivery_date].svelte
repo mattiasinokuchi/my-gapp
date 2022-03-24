@@ -34,6 +34,7 @@
 	export let delivery, delivery_date, todays_delivery, currency, count, phone;
 	const today = new Date().toISOString().slice(0, 10);
 	let buttonText = "Copy telephone numbers";
+	let editEnabled = false;
 	function copy() {
 		navigator.clipboard.writeText(phone[0].numbers);
 		buttonText = "Phone numbers copied";
@@ -78,12 +79,13 @@
 					{first_name}
 					{last_name}:
 				</h2>
-				<p hidden={!place_of_delivery}>
-					Place of delivery: {place_of_delivery}
+				<p>
+					{place_of_delivery},
+					{street_address}, {city}
 				</p>
-				<p hidden={place_of_delivery}>{street_address}, {city}</p>
 				<p hidden={!notes}>Notes: {notes}</p>
 				{#each orders as { order_id, product_name, product_id, price }}
+					<p>....................</p>
 					<form action="/deliver/deliver.json" method="post">
 						<input hidden name="customer_id" value={customer_id} />
 						<input hidden name="order_id" value={order_id} />
@@ -93,22 +95,42 @@
 							value={delivery_date}
 						/>
 						<input hidden name="product_id" value={product_id} />
-						<label for="product_name">{product_name}, </label>
+						<p>{product_name}</p>
 						<input
 							hidden
 							type="text"
 							name="product_name"
 							value={product_name}
 						/>
-						<label for="price">({currency})</label>
 						<input
-							type="number"
+							hidden
 							name="price"
 							bind:value={price}
-							min="0"
-							max="999"
 						/>
-						<br />
+						{#if editEnabled}
+							<label for="price">Price ({currency})</label>
+							<input
+								type="number"
+								name="price"
+								bind:value={price}
+								min="0"
+								max="999"
+							/>
+							<label for="delivery_comment">Comment</label>
+							<input
+								type="text"
+								name="delivery_comment"
+								size="20"
+								placeholder="...discount, damage, loss..."
+							/>
+							<br />
+						{/if}
+						<input
+							type="button"
+							on:click={() => (editEnabled = true)}
+							value="Edit"
+							hidden={editEnabled}
+						/>
 						<input
 							type="submit"
 							value="Deliver"
@@ -135,12 +157,12 @@
 				<p>
 					{first_name}
 					{last_name},
-					<span hidden={!place_of_delivery}
-						>Place of delivery: {place_of_delivery}</span
-					>
-					<span hidden={place_of_delivery}
-						>{street_address}, {city}</span
-					>
+					<span>
+						Drop at: {place_of_delivery},
+					</span>
+					<span>
+						{street_address}, {city}
+					</span>
 					<span hidden={!notes}>Note: {notes}</span>
 				</p>
 				<ul>
