@@ -55,6 +55,7 @@
         bottom: 10%;
         left: 25%;
         right: 25%;
+        font-size: x-small;
     }
     a {
         text-decoration: underline;
