@@ -134,7 +134,6 @@
 						<input
 							type="submit"
 							value="Deliver"
-							disabled={delivery_date !== today}
 						/>
 					</form>
 				{/each}
