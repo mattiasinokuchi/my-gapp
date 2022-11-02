@@ -20,7 +20,8 @@ export const post = async (event) => {
         data.get('product_name'),
         data.get('product_id'),
         data.get('order_id'),
-        data.get('delivery_comment')
+        data.get('delivery_comment'),
+        data.get('delivery_date')
     ];
     try {
         await client.query('BEGIN');
@@ -32,9 +33,10 @@ export const post = async (event) => {
                 product_name,
                 product_id,
                 order_id,
-                delivery_comment
+                delivery_comment,
+                delivery_time
             )
-            VALUES($1, $2, $3, $4, $5, $6)
+            VALUES($1, $2, $3, $4, $5, $6, $7)
             RETURNING *
             `, values
         );
