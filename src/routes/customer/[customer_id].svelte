@@ -14,14 +14,14 @@
             );
             const time_out = await res.json();
             res = await fetch(`/customer/get_next_delivery_date.json`);
-            const { delivery_date  } = await res.json();
+            const { delivery_date } = await res.json();
             return {
                 props: {
                     customer,
                     order,
                     option,
                     time_out,
-                    delivery_date
+                    delivery_date,
                 },
             };
         } catch (error) {
@@ -32,6 +32,7 @@
 
 <script>
     export let customer, order, option, time_out, delivery_date;
+    const today = new Date().toISOString().slice(0, 10);
     let selected_product_id, selected_product, start_date;
     let showDelete = false;
     $: if (selected_product_id) {
@@ -136,11 +137,21 @@
         {#if selected_product && selected_product_id !== ""}
             {#if selected_product.delivery_interval}
                 <label for="start_date">Start</label>
+                <input
+                    required
+                    type="date"
+                    name="start_date"
+                    value={delivery_date}
+                />
             {:else}
-                <!-- start_date is used as delivery date for one-time orders -->
                 <label for="start_date">Delivery</label>
+                <input
+                    required
+                    type="date"
+                    name="start_date"
+                    value={today}
+                />
             {/if}
-            <input required type="date" name="start_date" value={delivery_date}/>
             <button type="submit">Add product</button>
         {/if}
     </form>
