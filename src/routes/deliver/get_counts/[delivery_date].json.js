@@ -15,6 +15,7 @@ export const get = async (event) => {
         const res = await pool.query(`
             SELECT
                 product_name,
+                quantity,
                 COUNT (order_table.product_id)
             FROM order_table
             INNER JOIN customer_table ON customer_table.id = order_table.customer_id
@@ -43,7 +44,7 @@ export const get = async (event) => {
                         MOD(($1::DATE - start_date), delivery_interval) = 0 -- ...when remainder is 0 days...
                         AND $1::DATE >= start_date  -- ...and subscription has started
                 END
-            GROUP BY product_name;
+            GROUP BY product_name, quantity;
         `, [event.params.delivery_date]);
         return {
             body: res.rows

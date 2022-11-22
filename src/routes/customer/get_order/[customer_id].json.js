@@ -13,6 +13,7 @@ export const get = async (event) => {
     } try {
         const res = await pool.query(`
             SELECT
+                quantity,
                 order_table.id AS order_id,
                 product_name,
                 TO_CHAR(start_date :: DATE, 'yyyy-mm-dd') AS start_date

@@ -30,9 +30,9 @@
 				<h2>
 					{delivery_date}
 				</h2>
-				{#each deliveries as { product_name, count }}
+				{#each deliveries as { quantity, product_name, count }}
 					<ul>
-						<li>{count} x {product_name}</li>
+						<li>{quantity*count} x {product_name}</li>
 					</ul>
 				{/each}
 			</a>

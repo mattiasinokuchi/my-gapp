@@ -47,9 +47,9 @@
 		<div class="whitebox">
 			<h1>{delivery_date}</h1>
 			<!-- This is a list of products and counts-->
-			{#each count as { product_name, count }}
+			{#each count as { product_name, count, quantity }}
 				<ul>
-					<li>{count} x {product_name}</li>
+					<li>{quantity*count} x {product_name}</li>
 				</ul>
 			{/each}
 			<div class="buttons">
@@ -84,7 +84,7 @@
 					{street_address}, {city}
 				</p>
 				<p hidden={!notes}>Notes: {notes}</p>
-				{#each orders as { order_id, product_name, product_id, price }}
+				{#each orders as { order_id, product_name, product_id, price, quantity }}
 					<p>....................</p>
 					<form action="/deliver/deliver.json" method="post">
 						<input hidden name="customer_id" value={customer_id} />
@@ -95,7 +95,7 @@
 							value={delivery_date}
 						/>
 						<input hidden name="product_id" value={product_id} />
-						<p>{product_name}</p>
+						<p>{quantity} x {product_name}</p>
 						<input
 							hidden
 							type="text"
@@ -108,7 +108,15 @@
 							bind:value={price}
 						/>
 						{#if editEnabled}
-							<label for="price">Price ({currency})</label>
+						<label for="quantity">Quantity</label>
+						<input
+							type="number"
+							name="quantity"
+							bind:value={quantity}
+							min="0"
+							max="999"
+						/>
+						<label for="price">Price ({currency})</label>
 							<input
 								type="number"
 								name="price"

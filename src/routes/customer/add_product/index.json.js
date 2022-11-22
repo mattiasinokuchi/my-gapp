@@ -17,21 +17,23 @@ export const post = async (event) => {
     try {
         if (data.get('start_date')) {
             await pool.query(
-                `INSERT INTO order_table(customer_id, product_id, start_date)
-                VALUES($1, $2, $3)`,
+                `INSERT INTO order_table(customer_id, product_id, quantity, start_date)
+                VALUES($1, $2, $3, $4)`,
                 [
                     data.get('customer_id'),
                     data.get('product_id'),
+                    data.get('quantity'),
                     data.get('start_date')
                 ]
             );
         } else {
             await pool.query(
-                `INSERT INTO order_table(customer_id, product_id)
-                VALUES($1, $2)`,
+                `INSERT INTO order_table(customer_id, product_id, quantity)
+                VALUES($1, $2, $3)`,
                 [
                     data.get('customer_id'),
-                    data.get('product_id')
+                    data.get('product_id'),
+                    data.get('quantity'),
                 ]
             );
         }

@@ -58,6 +58,7 @@ export const get = async (event) => {
                     product_name: obj.product_name,
                     product_id: obj.product_id,
                     price: obj.price,
+                    quantity: obj.quantity,
                     start_date: obj.start_date,
                     delivery_interval: obj.delivery_interval
                 });
@@ -75,6 +76,7 @@ export const get = async (event) => {
                         product_name: obj.product_name,
                         product_id: obj.product_id,
                         price: obj.price,
+                        quantity: obj.quantity,
                         start_date: obj.start_date,
                         delivery_interval: obj.delivery_interval
                     }]

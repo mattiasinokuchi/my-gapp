@@ -93,14 +93,14 @@
         <section class="box">
             <h2>Subscriptions/orders</h2>
             <ul>
-                {#each order as { product_name, order_id, start_date }}
+                {#each order as { quantity, product_name, order_id, start_date }}
                     <li>
                         <form
                             action="/customer/remove_order.json"
                             method="post"
                             disabled={!customer.active}
                         >
-                            {product_name}, (start/delivery {start_date})
+                            {quantity} {product_name}, (start/delivery {start_date})
                             <br />
                             <input
                                 hidden
@@ -135,6 +135,8 @@
             {/each}
         </select>
         {#if selected_product && selected_product_id !== ""}
+            <label for="quantity">Quantity</label>
+            <input required type="number" name="quantity" value="1" min="1" max="32767"/>
             {#if selected_product.delivery_interval}
                 <label for="start_date">Start</label>
                 <input
@@ -145,12 +147,7 @@
                 />
             {:else}
                 <label for="start_date">Delivery</label>
-                <input
-                    required
-                    type="date"
-                    name="start_date"
-                    value={today}
-                />
+                <input required type="date" name="start_date" value={today} />
             {/if}
             <button type="submit">Add product</button>
         {/if}

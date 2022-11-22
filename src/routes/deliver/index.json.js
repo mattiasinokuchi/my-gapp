@@ -15,6 +15,7 @@ export const get = async (event) => {
         const res = await pool.query(`
             SELECT
                 product_name,
+                quantity,
                 COUNT (product_name),
                 CASE    -- delivery date for...
                     WHEN delivery_interval IS NULL  -- one-time orders...
@@ -89,6 +90,7 @@ export const get = async (event) => {
                     index*delivery_interval < 90
                     END
             GROUP BY
+                quantity,
                 product_name,
                 delivery_date
             ORDER BY
@@ -107,14 +109,16 @@ export const get = async (event) => {
                 );
                 acc[index].deliveries.push({
                     product_name: obj.product_name,
-                    count: obj.count
+                    count: obj.count,
+                    quantity: obj.quantity
                 });
             } else {
                 acc.push({
                     delivery_date: obj.delivery_date,
                     deliveries: [{
                         product_name: obj.product_name,
-                        count: obj.count
+                        count: obj.count,
+                        quantity: obj.quantity
                     }]
                 });
             }
