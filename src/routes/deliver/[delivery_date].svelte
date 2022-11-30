@@ -107,6 +107,11 @@
 							name="price"
 							bind:value={price}
 						/>
+						<input
+							hidden
+							name="quantity"
+							bind:value={quantity}
+						/>
 						{#if editEnabled}
 						<label for="quantity">Quantity</label>
 						<input
@@ -152,9 +157,9 @@
 	<div id="print">
 		<!-- This is a list of products and counts-->
 		<p>To deliver:</p>
-		{#each count as { product_name, count }}
+		{#each count as { product_name, count, quantity }}
 			<ul>
-				<li>{count} x {product_name}</li>
+				<li>{quantity*count} x {product_name}</li>
 			</ul>
 		{/each}
 		<hr />
@@ -173,8 +178,8 @@
 					<span hidden={!notes}>Note: {notes}</span>
 				</p>
 				<ul>
-					{#each orders as { product_name }}
-						<li>{product_name}</li>
+					{#each orders as { product_name, quantity }}
+						<li>{quantity} {product_name}</li>
 					{/each}
 				</ul>
 			</div>

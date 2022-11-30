@@ -17,6 +17,7 @@ export const post = async (event) => {
     const values = [
         data.get('customer_id'),
         data.get('price'),
+        data.get('quantity'),
         data.get('product_name'),
         data.get('product_id'),
         data.get('order_id'),
@@ -30,17 +31,18 @@ export const post = async (event) => {
             INSERT INTO delivery_table(
                 customer_id,
                 price,
+                quantity,
                 product_name,
                 product_id,
                 order_id,
                 delivery_comment,
                 delivery_time
             )
-            VALUES($1, $2, $3, $4, $5, $6, $7)
+            VALUES($1, $2, $3, $4, $5, $6, $7, $8)
             RETURNING *
             `, values
         );
-        //  Check if the delivery is a subscription
+        //  Check if the delivery is a subscription...
         const res = await client.query(`
             SELECT delivery_interval
             FROM order_table
@@ -49,7 +51,7 @@ export const post = async (event) => {
             `, [data.get('order_id')]
         );
         if (!res.rows[0].delivery_interval) {
-            //  Delete the one-time order
+            //  ...if not delete the order
             await client.query(`
             DELETE
             FROM order_table

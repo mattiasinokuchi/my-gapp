@@ -21,14 +21,16 @@ export const post = async (event) => {
             SET
                 delivery_time = $1,
                 price = $2,
-                delivery_comment = $3,
-                billing_date = NULLIF ($4::text, '')::date
+                quantity = $3,
+                delivery_comment = $4,
+                billing_date = NULLIF ($5::text, '')::date
             WHERE
-                id = $5;
+                id = $6;
             `,
             [
                 data.get('delivery_date'),
                 data.get('price'),
+                data.get('quantity'),
                 data.get('delivery_comment'),
                 data.get('billing_date'),
                 data.get('delivery_id')

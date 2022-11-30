@@ -100,7 +100,7 @@
                             method="post"
                             disabled={!customer.active}
                         >
-                            {quantity} {product_name}, (start/delivery {start_date})
+                            {quantity} x {product_name}, (start/delivery {start_date})
                             <br />
                             <input
                                 hidden
@@ -136,7 +136,7 @@
         </select>
         {#if selected_product && selected_product_id !== ""}
             <label for="quantity">Quantity</label>
-            <input required type="number" name="quantity" value="1" min="1" max="32767"/>
+            <input required type="number" name="quantity" value="1" min="1" max="999"/>
             {#if selected_product.delivery_interval}
                 <label for="start_date">Start</label>
                 <input

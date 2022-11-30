@@ -40,19 +40,20 @@ export const get = async (request) => {
                     accObject => accObject.customer_id === obj.customer_id
                 );
                 if (!obj.bill_date) {
-                    acc[index].to_pay = acc[index].to_pay + obj.price;
+                    acc[index].to_pay = acc[index].to_pay + obj.price*obj.quantity;
                 }
                 acc[index].delivery.push({
                     delivery_id: obj.delivery_id,
                     delivery_date: obj.delivery_date,
                     product_name: obj.product_name,
                     price: obj.price,
+                    quantity: obj.quantity,
                     billing_date: obj.bill_date,
                     delivery_comment: obj.delivery_comment
                 });
             } else {
                 if (!obj.bill_date) {
-                    to_pay = obj.price;
+                    to_pay = obj.price*obj.quantity;
                 } else {
                     to_pay = 0
                 }
@@ -66,6 +67,7 @@ export const get = async (request) => {
                         delivery_date: obj.delivery_date,
                         product_name: obj.product_name,
                         price: obj.price,
+                        quantity: obj.quantity,
                         billing_date: obj.bill_date,
                         delivery_comment: obj.delivery_comment
                     }]

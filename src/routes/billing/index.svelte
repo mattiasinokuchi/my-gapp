@@ -76,7 +76,7 @@
 				</h2>
 				<!-- This is a list of deliveries -->
 				<ul>
-					{#each delivery as { delivery_id, delivery_date, product_name, price, billing_date, delivery_comment }}
+					{#each delivery as { delivery_id, delivery_date, product_name, price, quantity, billing_date, delivery_comment }}
 						<!-- This is a form for updating a delivery -->
 						{#if edit_id === delivery_id}
 							<li>
@@ -91,6 +91,16 @@
 											value={delivery_id}
 										/>
 										<p>
+											<label for="quantity"
+												>Quantity</label
+											>
+											<input
+												type="number"
+												name="quantity"
+												value={quantity}
+												min="0"
+												max="999"
+											/>
 											<label for="product_name"
 												>Product</label
 											>
@@ -160,7 +170,7 @@
 									hidden={!showBilled && billing_date}
 									class:active={billing_date}
 								>
-									{delivery_date}, {product_name}, {currency}
+									{delivery_date}, {quantity} x {product_name}, {currency}
 									{price}
 								</span>
 								<button
@@ -199,7 +209,7 @@
 					{last_name}:
 				</p>
 				<ul>
-					{#each delivery as { delivery_date, product_name, price, billing_date }}
+					{#each delivery as { delivery_date, product_name, price, quantity, billing_date }}
 						<!-- This is a list of deliveries with billing dates -->
 						<li hidden={!showBilled && billing_date}>
 							<span
@@ -208,7 +218,7 @@
 								>{delivery_date}:
 							</span>
 							<span class:active={billing_date} for="product_name"
-								>{product_name} ({currency}{price})</span
+								>{quantity} x {product_name} ({currency}{price})</span
 							>
 							<span hidden={!billing_date} for="billing_date"
 								>billed
