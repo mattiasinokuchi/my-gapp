@@ -19,7 +19,7 @@ export const get = async (event) => {
                 COUNT (product_name),
                 CASE    -- delivery date for...
                     WHEN delivery_interval IS NULL  -- one-time orders...
-                        THEN TO_CHAR(start_date, 'yyyy-mm-dd')  -- ...are delivered at start_date...
+                        THEN TO_CHAR(start_date, 'yyyy-mm-dd')  -- ...are at the start_date...
                     ELSE    -- ...delivery date for subscriptions are calculated by...
                         TO_CHAR(
                             CURRENT_DATE -- ...todays date...
@@ -78,12 +78,12 @@ export const get = async (event) => {
                     NOT IN (
                         SELECT order_id
                         FROM delivery_table
-                        WHERE delivery_time::date = (CURRENT_DATE + index*delivery_interval) 
+                        WHERE delivery_time::date = (CURRENT_DATE + index*delivery_interval  - MOD(CURRENT_DATE - start_date, delivery_interval)) 
                     )
             AND
                 -- delivery within 90 days (to prevent products with shorter delivery interval being replaced by products with longer interval)
                 CASE
-                    -- for one-time orders to be present (and not be counted 90 times)
+                    -- for one-time orders to be present (and not being counted 90 times)
                     WHEN index = 0
                         THEN index*delivery_interval < 90 OR delivery_interval IS NULL
                     ELSE
