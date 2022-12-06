@@ -45,35 +45,38 @@
 
     <!-- This is a list of subscription time-outs with delete buttons -->
     {#if time_out.length > 0}
-        <section class="box">
-            <h2>Subscription time-out</h2>
-            <ul>
-                {#each time_out as { time_out_id, start_date, end_date }}
-                    <li>
-                        <form
-                            action="/customer/remove_time_out.json"
-                            method="post"
-                            disabled={!customer.active}
-                        >
-                            {start_date} to {end_date}
-                            <input
-                                hidden
-                                name="time_out_id"
-                                value={time_out_id}
-                            />
-                            <input
-                                hidden
-                                name="customer_id"
-                                value={customer.customer_id}
-                            />
-                            <button type="submit" disabled={!customer.active}
-                                >Delete</button
+        <div class="wrapper">
+            <section class="box">
+                <h2>Subscription time-out</h2>
+                <ul>
+                    {#each time_out as { time_out_id, start_date, end_date }}
+                        <li>
+                            <form
+                                action="/customer/remove_time_out.json"
+                                method="post"
+                                disabled={!customer.active}
                             >
-                        </form>
-                    </li>
-                {/each}
-            </ul>
-        </section>
+                                {start_date} to {end_date}
+                                <input
+                                    hidden
+                                    name="time_out_id"
+                                    value={time_out_id}
+                                />
+                                <input
+                                    hidden
+                                    name="customer_id"
+                                    value={customer.customer_id}
+                                />
+                                <button
+                                    type="submit"
+                                    disabled={!customer.active}>Delete</button
+                                >
+                            </form>
+                        </li>
+                    {/each}
+                </ul>
+            </section>
+        </div>
     {/if}
 
     <!-- This is a form for subscription time-out -->
@@ -90,32 +93,39 @@
 
     <!-- This is a list of subscriptions/orders with delete buttons -->
     {#if order.length > 0}
-        <section class="box">
-            <h2>Subscriptions/orders</h2>
-            <ul>
-                {#each order as { quantity, product_name, order_id, start_date }}
-                    <li>
-                        <form
-                            action="/customer/remove_order.json"
-                            method="post"
-                            disabled={!customer.active}
-                        >
-                            {quantity} x {product_name}, (start/delivery {start_date})
-                            <br />
-                            <input
-                                hidden
-                                name="customer_id"
-                                value={customer.customer_id}
-                            />
-                            <input hidden name="order_id" value={order_id} />
-                            <button type="submit" disabled={!customer.active}
-                                >Delete</button
+        <div class="wrapper">
+            <section class="box">
+                <h2>Subscriptions/orders</h2>
+                <ul>
+                    {#each order as { quantity, product_name, order_id, start_date }}
+                        <li>
+                            <form
+                                action="/customer/remove_order.json"
+                                method="post"
+                                disabled={!customer.active}
                             >
-                        </form>
-                    </li>
-                {/each}
-            </ul>
-        </section>
+                                {quantity} x {product_name}, (start/delivery {start_date})
+                                <br />
+                                <input
+                                    hidden
+                                    name="customer_id"
+                                    value={customer.customer_id}
+                                />
+                                <input
+                                    hidden
+                                    name="order_id"
+                                    value={order_id}
+                                />
+                                <button
+                                    type="submit"
+                                    disabled={!customer.active}>Delete</button
+                                >
+                            </form>
+                        </li>
+                    {/each}
+                </ul>
+            </section>
+        </div>
     {/if}
 
     <!-- This is a form for adding products -->
@@ -136,7 +146,14 @@
         </select>
         {#if selected_product && selected_product_id !== ""}
             <label for="quantity">Quantity</label>
-            <input required type="number" name="quantity" value="1" min="1" max="999"/>
+            <input
+                required
+                type="number"
+                name="quantity"
+                value="1"
+                min="1"
+                max="999"
+            />
             {#if selected_product.delivery_interval}
                 <label for="start_date">Start</label>
                 <input
@@ -154,88 +171,103 @@
     </form>
 
     <!-- This is a form for contact information -->
-    <form action="/customer/update_contact_info.json" method="post" class="box">
-        <h2>Contact Information</h2>
-        <input type="hidden" name="customer_id" value={customer.customer_id} />
-        <p>
-            <label for="first_name">First Name</label>
+    <div class="wrapper">
+        <form
+            action="/customer/update_contact_info.json"
+            method="post"
+            class="box"
+        >
+            <h2>Contact Information</h2>
             <input
-                type="text"
-                id="first_name"
-                name="first_name"
-                value={customer.first_name}
+                type="hidden"
+                name="customer_id"
+                value={customer.customer_id}
             />
-        </p>
-        <p>
-            <label for="last_name">Last Name</label>
-            <input
-                type="text"
-                id="last_name"
-                name="last_name"
-                value={customer.last_name}
-            />
-        </p>
-        <p>
-            <label for="street_address">Street Address</label>
-            <input
-                type="text"
-                id="street_address"
-                name="street_address"
-                value={customer.street_address}
-            />
-        </p>
-        <p>
-            <label for="postcode">Postcode</label>
-            <input
-                type="text"
-                id="postcode"
-                name="postcode"
-                value={customer.postcode}
-            />
-        </p>
-        <p>
-            <label for="city">City</label>
-            <input type="text" id="city" name="city" value={customer.city} />
-        </p>
-        <p>
-            <label for="telephone">Telephone</label>
-            <input
-                type="number"
-                id="telephone"
-                name="telephone"
-                value={customer.telephone}
-            />
-        </p>
-        <p>
-            <label for="email">Email</label>
-            <input
-                type="email"
-                id="email"
-                name="email"
-                value={customer.email}
-            />
-        </p>
-        <p>
-            <label for="place_of_delivery">Place of delivery</label>
-            <input
-                type="text"
-                id="place_of_delivery"
-                name="place_of_delivery"
-                value={customer.place_of_delivery}
-            />
-        </p>
-        <p>
-            <label for="notes">Notes</label>
-            <input
-                type="text"
-                id="notes"
-                name="notes"
-                value={customer.notes}
-                placeholder="Allergies, recurring wishes..."
-            />
-        </p>
-        <input type="submit" value="Update" />
-    </form>
+            <p>
+                <label for="first_name">First Name</label>
+                <input
+                    type="text"
+                    id="first_name"
+                    name="first_name"
+                    value={customer.first_name}
+                />
+            </p>
+            <p>
+                <label for="last_name">Last Name</label>
+                <input
+                    type="text"
+                    id="last_name"
+                    name="last_name"
+                    value={customer.last_name}
+                />
+            </p>
+            <p>
+                <label for="street_address">Street Address</label>
+                <input
+                    type="text"
+                    id="street_address"
+                    name="street_address"
+                    value={customer.street_address}
+                />
+            </p>
+            <p>
+                <label for="postcode">Postcode</label>
+                <input
+                    type="text"
+                    id="postcode"
+                    name="postcode"
+                    value={customer.postcode}
+                />
+            </p>
+            <p>
+                <label for="city">City</label>
+                <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    value={customer.city}
+                />
+            </p>
+            <p>
+                <label for="telephone">Telephone</label>
+                <input
+                    type="number"
+                    id="telephone"
+                    name="telephone"
+                    value={customer.telephone}
+                />
+            </p>
+            <p>
+                <label for="email">Email</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={customer.email}
+                />
+            </p>
+            <p>
+                <label for="place_of_delivery">Place of delivery</label>
+                <input
+                    type="text"
+                    id="place_of_delivery"
+                    name="place_of_delivery"
+                    value={customer.place_of_delivery}
+                />
+            </p>
+            <p>
+                <label for="notes">Notes</label>
+                <input
+                    type="text"
+                    id="notes"
+                    name="notes"
+                    value={customer.notes}
+                    placeholder="Allergies, recurring wishes..."
+                />
+            </p>
+            <input type="submit" value="Update" />
+        </form>
+    </div>
 
     <section class="whitebox">
         <!-- This is a form for deleting customers -->

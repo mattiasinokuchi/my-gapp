@@ -69,133 +69,140 @@
 
 		<!-- This is a list of customers to bill -->
 		{#each filteredCustomer as { first_name, last_name, delivery, customer_id, to_pay }}
-			<div class="box">
-				<h2>
-					{first_name}
-					{last_name}:
-				</h2>
-				<!-- This is a list of deliveries -->
-				<ul>
-					{#each delivery as { delivery_id, delivery_date, product_name, price, quantity, billing_date, delivery_comment }}
-						<!-- This is a form for updating a delivery -->
-						{#if edit_id === delivery_id}
-							<li>
-								<form
-									action="/billing/update.json"
-									method="post"
-								>
-									<fieldset>
-										<input
-											hidden
-											name="delivery_id"
-											value={delivery_id}
-										/>
-										<p>
-											<label for="quantity"
-												>Quantity</label
-											>
+			<div class="wrapper">
+				<div class="box">
+					<h2>
+						{first_name}
+						{last_name}:
+					</h2>
+					<!-- This is a list of deliveries -->
+					<ul>
+						{#each delivery as { delivery_id, delivery_date, product_name, price, quantity, billing_date, delivery_comment }}
+							<!-- This is a form for updating a delivery -->
+							{#if edit_id === delivery_id}
+								<li>
+									<form
+										action="/billing/update.json"
+										method="post"
+									>
+										<fieldset>
 											<input
-												type="number"
-												name="quantity"
-												value={quantity}
-												min="0"
-												max="999"
+												hidden
+												name="delivery_id"
+												value={delivery_id}
 											/>
-											<label for="product_name"
-												>Product</label
-											>
+											<p>
+												<label for="quantity"
+													>Quantity</label
+												>
+												<input
+													type="number"
+													name="quantity"
+													value={quantity}
+													min="0"
+													max="999"
+												/>
+												<label for="product_name"
+													>Product</label
+												>
+												<input
+													type="text"
+													name="product_name"
+													value={product_name}
+													disabled
+												/>
+											</p>
+											<p>
+												<label for="delivery_date"
+													>Delivery date
+												</label>
+												<input
+													type="date"
+													name="delivery_date"
+													value={delivery_date}
+													required
+												/>
+											</p>
+											<p>
+												<label for="price"
+													>Price ({currency})
+												</label>
+												<input
+													type="number"
+													name="price"
+													value={price}
+													min="0"
+													max="999"
+												/>
+											</p>
+											<p>
+												<label for="delivery_comment"
+													>Comment
+												</label>
+												<input
+													type="text"
+													name="delivery_comment"
+													value={delivery_comment}
+													size="20"
+												/>
+											</p>
+											<p>
+												<label for="billing_date"
+													>Billing date
+												</label>
+												<input
+													type="date"
+													name="billing_date"
+													value={billing_date}
+												/>
+											</p>
 											<input
-												type="text"
-												name="product_name"
-												value={product_name}
-												disabled
+												type="button"
+												value="Cancel"
+												on:click={() =>
+													(edit_id = null)}
 											/>
-										</p>
-										<p>
-											<label for="delivery_date"
-												>Delivery date
-											</label>
 											<input
-												type="date"
-												name="delivery_date"
-												value={delivery_date}
-												required
+												type="submit"
+												value="Update"
 											/>
-										</p>
-										<p>
-											<label for="price"
-												>Price ({currency})
-											</label>
-											<input
-												type="number"
-												name="price"
-												value={price}
-												min="0"
-												max="999"
-											/>
-										</p>
-										<p>
-											<label for="delivery_comment"
-												>Comment
-											</label>
-											<input
-												type="text"
-												name="delivery_comment"
-												value={delivery_comment}
-												size="20"
-											/>
-										</p>
-										<p>
-											<label for="billing_date"
-												>Billing date
-											</label>
-											<input
-												type="date"
-												name="billing_date"
-												value={billing_date}
-											/>
-										</p>
-										<input
-											type="button"
-											value="Cancel"
-											on:click={() => (edit_id = null)}
-										/>
-										<input type="submit" value="Update" />
-									</fieldset>
-								</form>
-							</li>
-						{:else}
-							<div>
-								<span
-									hidden={!showBilled && billing_date}
-									class:active={billing_date}
-								>
-									{delivery_date}, {quantity} x {product_name}, {currency}
-									{price}
-								</span>
-								<button
-									on:click={() => (edit_id = delivery_id)}
-									hidden={edit_id === delivery_id ||
-										(!showBilled && billing_date)}
-									disabled={edit_id}
-									>Edit
-								</button>
-							</div>
-						{/if}
-					{/each}
-				</ul>
-				<hr />
-				Sum to bill ({currency}): {to_pay}
-				<!-- This is a form to set multiple deliveries as billed -->
-				<form action="/billing/bill_all.json" method="post">
-					<input hidden name="customer_id" value={customer_id} />
-					<input
-						type="submit"
-						value="Billed them all!"
-						hidden={(() => allDeliveriesBilled(delivery))()}
-						disabled={edit_id}
-					/>
-				</form>
+										</fieldset>
+									</form>
+								</li>
+							{:else}
+								<div>
+									<span
+										hidden={!showBilled && billing_date}
+										class:active={billing_date}
+									>
+										{delivery_date}, {quantity} x {product_name},
+										{currency}
+										{price}
+									</span>
+									<button
+										on:click={() => (edit_id = delivery_id)}
+										hidden={edit_id === delivery_id ||
+											(!showBilled && billing_date)}
+										disabled={edit_id}
+										>Edit
+									</button>
+								</div>
+							{/if}
+						{/each}
+					</ul>
+					<hr />
+					Sum to bill ({currency}): {to_pay}
+					<!-- This is a form to set multiple deliveries as billed -->
+					<form action="/billing/bill_all.json" method="post">
+						<input hidden name="customer_id" value={customer_id} />
+						<input
+							type="submit"
+							value="Billed them all!"
+							hidden={(() => allDeliveriesBilled(delivery))()}
+							disabled={edit_id}
+						/>
+					</form>
+				</div>
 			</div>
 		{/each}
 	</div>

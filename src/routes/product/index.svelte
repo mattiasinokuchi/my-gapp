@@ -7,7 +7,7 @@
 			return {
 				props: {
 					product,
-                    currency: process.env.CURRENCY,
+					currency: process.env.CURRENCY,
 				},
 			};
 		}
@@ -71,8 +71,8 @@
 				id="price"
 				name="price"
 				aria-label="Add product"
-                min="0"
-                max="999"
+				min="0"
+				max="999"
 			/>
 			<br />
 			<button type="submit">Submit</button>
@@ -83,10 +83,12 @@
 
 	<!-- This a list of all products -->
 	{#each product as { product_name, product_id }}
-		<a class="box" sveltekit:prefetch href={`/product/${product_id}`}>
-			<h2>{product_name}</h2>
-		</a>
-		<br />
+		<div class="wrapper">
+			<a class="box" sveltekit:prefetch href={`/product/${product_id}`}>
+				<h2>{product_name}</h2>
+			</a>
+			<br />
+		</div>
 	{/each}
 </main>
 

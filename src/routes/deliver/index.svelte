@@ -25,6 +25,7 @@
 
 	<!-- This is a list of delivery dates with products and counts-->
 	{#each delivery as { delivery_date, deliveries }}
+	<div class="wrapper">
 		<div class="box">
 			<a sveltekit:prefetch href={`/deliver/${delivery_date}`}>
 				<h2>
@@ -37,13 +38,13 @@
 				{/each}
 			</a>
 		</div>
+	</div>
 	{/each}
 </main>
 
 <style>
 	.box {
 		display: flex;
-		align-items: center;
 		justify-content: center;
 	}
 </style>

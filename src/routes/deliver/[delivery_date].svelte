@@ -74,6 +74,7 @@
 
 		<!-- This is a list of customers and products to deliver-->
 		{#each delivery as { customer_id, first_name, last_name, place_of_delivery, street_address, city, notes, orders }}
+		<div class="wrapper">
 			<div class="box">
 				<h2>
 					{first_name}
@@ -151,6 +152,7 @@
 					</form>
 				{/each}
 			</div>
+		</div>
 		{/each}
 	</div>
 	<!-- This is for printers -->
