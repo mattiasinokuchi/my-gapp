@@ -6,7 +6,7 @@ import pkg from 'pg';
 const { Pool } = pkg;
 
 export const pool = new Pool({
-  user: 'postgres',
+  user: 'postgres.dodlckdovwnmjwgpwoii',
   host: process.env.SUPABASE_HOST,
   database: 'postgres',
   password: process.env.SUPABASE_PASSWORD,
